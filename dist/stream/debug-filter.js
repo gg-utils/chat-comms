@@ -1,0 +1,190 @@
+/**
+ * Chunk-safe debug block filter using parsed JSON inspection.
+ *
+ * Replaces substring-based `"debug": true` detection with actual JSON parsing
+ * to avoid false positives from nested text containing that substring.
+ */
+import { PROTOCOL_FENCE_LANGUAGE } from "../wire/constants.js";
+const FENCE_PATTERN_START = `\`\`\`${PROTOCOL_FENCE_LANGUAGE}`;
+const FENCE_PATTERN_END = "```";
+/**
+ * Filters out debug protocol blocks from streamed content.
+ *
+ * A protocol block is removed if parsing its JSON yields an object with `debug === true`.
+ * Non-protocol fences and malformed JSON are passed through unchanged.
+ *
+ * @param content - Raw stream content that may contain fenced JSON blocks.
+ * @returns Content with debug blocks removed.
+ */
+export function filterDebugProtocolBlocks(content) {
+    // Use a regex to find all lowercase json fenced blocks
+    const pattern = new RegExp(`\`\`\`${PROTOCOL_FENCE_LANGUAGE}\\s*\\n([\\s\\S]*?)\\n\`\`\``, "g");
+    return content.replace(pattern, (match, jsonContent) => {
+        try {
+            const parsed = JSON.parse(jsonContent);
+            if (typeof parsed === "object" &&
+                parsed !== null &&
+                "debug" in parsed &&
+                parsed["debug"] === true) {
+                return "";
+            }
+        }
+        catch {
+            // Not valid JSON — pass through
+        }
+        return match;
+    });
+}
+/** Creates a stateful, chunk-safe debug protocol block filter for streaming writers. */
+export function createProtocolDebugBlockFilter() {
+    let pendingContent = "";
+    const append = (chunk) => {
+        pendingContent += chunk;
+        let filteredOutput = "";
+        while (pendingContent.length > 0) {
+            const startIndex = pendingContent.indexOf(FENCE_PATTERN_START);
+            if (startIndex === -1) {
+                const pendingPrefixLength = getProtocolFencePrefixSuffixLength(pendingContent);
+                const safeOutputEnd = pendingContent.length - pendingPrefixLength;
+                filteredOutput += pendingContent.slice(0, safeOutputEnd);
+                pendingContent = pendingContent.slice(safeOutputEnd);
+                return filteredOutput;
+            }
+            filteredOutput += pendingContent.slice(0, startIndex);
+            const scanResult = scanProtocolFenceBlock(pendingContent, startIndex);
+            if (scanResult.status === "incomplete") {
+                pendingContent = pendingContent.slice(startIndex);
+                return filteredOutput;
+            }
+            if (scanResult.status === "malformed") {
+                filteredOutput += pendingContent.slice(startIndex, scanResult.recoveryIndex);
+                pendingContent = pendingContent.slice(scanResult.recoveryIndex);
+                continue;
+            }
+            if (!isDebugProtocolJsonBlock(scanResult.raw)) {
+                filteredOutput += scanResult.fencedBlock;
+            }
+            pendingContent = pendingContent.slice(scanResult.nextIndex);
+        }
+        return filteredOutput;
+    };
+    const flush = () => {
+        const flushedContent = pendingContent;
+        pendingContent = "";
+        return flushedContent;
+    };
+    const reset = () => {
+        pendingContent = "";
+    };
+    const getPendingContent = () => pendingContent;
+    return { append, flush, reset, getPendingContent };
+}
+function scanProtocolFenceBlock(content, startIndex) {
+    let cursor = startIndex + FENCE_PATTERN_START.length;
+    while (cursor < content.length && isProtocolWhitespace(content[cursor])) {
+        cursor++;
+    }
+    if (cursor >= content.length) {
+        return { status: "incomplete" };
+    }
+    if (content[cursor] !== "{" && content[cursor] !== "[") {
+        return {
+            status: "malformed",
+            recoveryIndex: startIndex + FENCE_PATTERN_START.length,
+        };
+    }
+    const jsonStartIndex = cursor;
+    const jsonEndIndex = findCompleteJsonEndIndex(content, jsonStartIndex);
+    if (jsonEndIndex === null) {
+        return { status: "incomplete" };
+    }
+    let fenceIndex = jsonEndIndex;
+    while (fenceIndex < content.length &&
+        isProtocolWhitespace(content[fenceIndex])) {
+        fenceIndex++;
+    }
+    if (fenceIndex + FENCE_PATTERN_END.length > content.length) {
+        return { status: "incomplete" };
+    }
+    if (content.slice(fenceIndex, fenceIndex + FENCE_PATTERN_END.length) !==
+        FENCE_PATTERN_END) {
+        return {
+            status: "malformed",
+            recoveryIndex: startIndex + FENCE_PATTERN_START.length,
+        };
+    }
+    const nextIndex = fenceIndex + FENCE_PATTERN_END.length;
+    return {
+        status: "complete",
+        raw: content.slice(jsonStartIndex, jsonEndIndex),
+        fencedBlock: content.slice(startIndex, nextIndex),
+        nextIndex,
+    };
+}
+function findCompleteJsonEndIndex(content, jsonStartIndex) {
+    let depth = 0;
+    let isInsideString = false;
+    let isEscaped = false;
+    for (let cursor = jsonStartIndex; cursor < content.length; cursor++) {
+        const character = content[cursor];
+        if (isInsideString) {
+            if (isEscaped) {
+                isEscaped = false;
+                continue;
+            }
+            if (character === "\\") {
+                isEscaped = true;
+                continue;
+            }
+            if (character === '"') {
+                isInsideString = false;
+            }
+            continue;
+        }
+        if (character === '"') {
+            isInsideString = true;
+            continue;
+        }
+        if (character === "{" || character === "[") {
+            depth++;
+            continue;
+        }
+        if (character === "}" || character === "]") {
+            depth--;
+            if (depth === 0) {
+                return cursor + 1;
+            }
+        }
+    }
+    return null;
+}
+function isDebugProtocolJsonBlock(rawJson) {
+    try {
+        const parsed = JSON.parse(rawJson);
+        return (typeof parsed === "object" &&
+            parsed !== null &&
+            "debug" in parsed &&
+            parsed["debug"] === true);
+    }
+    catch {
+        return false;
+    }
+}
+function isProtocolWhitespace(character) {
+    return (character === " " ||
+        character === "\n" ||
+        character === "\r" ||
+        character === "\t");
+}
+function getProtocolFencePrefixSuffixLength(content) {
+    const maxCandidateLength = Math.min(content.length, FENCE_PATTERN_START.length - 1);
+    for (let candidateLength = maxCandidateLength; candidateLength > 0; candidateLength--) {
+        if (FENCE_PATTERN_START.startsWith(content.slice(content.length - candidateLength))) {
+            return candidateLength;
+        }
+    }
+    return 0;
+}
+// Re-export fence constants for consumers
+export { FENCE_PATTERN_START, FENCE_PATTERN_END };
+//# sourceMappingURL=debug-filter.js.map

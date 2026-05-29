@@ -1,0 +1,85 @@
+{
+  "name": "@gg-utils/chat-comms",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Reusable chat stream protocol contracts, schemas, builders, and stream helpers for protocol producers and UI consumers.",
+  "type": "module",
+  "license": "UNLICENSED",
+  "sideEffects": false,
+  "exports": {
+    "./wire": {
+      "types": "./dist/public/wire.d.ts",
+      "import": "./dist/public/wire.js",
+      "default": "./dist/public/wire.js"
+    },
+    "./schemas": {
+      "types": "./dist/public/schemas.d.ts",
+      "import": "./dist/public/schemas.js",
+      "default": "./dist/public/schemas.js"
+    },
+    "./validators": {
+      "types": "./dist/public/validators.d.ts",
+      "import": "./dist/public/validators.js",
+      "default": "./dist/public/validators.js"
+    },
+    "./stream": {
+      "types": "./dist/public/stream.d.ts",
+      "import": "./dist/public/stream.js",
+      "default": "./dist/public/stream.js"
+    },
+    "./animation": {
+      "types": "./dist/public/animation.d.ts",
+      "import": "./dist/public/animation.js",
+      "default": "./dist/public/animation.js"
+    },
+    "./builders": {
+      "types": "./dist/public/builders.d.ts",
+      "import": "./dist/public/builders.js",
+      "default": "./dist/public/builders.js"
+    },
+    "./fixtures": {
+      "types": "./dist/public/fixtures.d.ts",
+      "import": "./dist/public/fixtures.js",
+      "default": "./dist/public/fixtures.js"
+    },
+    "./runtime/queue": {
+      "types": "./dist/public/runtime/queue.d.ts",
+      "import": "./dist/public/runtime/queue.js",
+      "default": "./dist/public/runtime/queue.js"
+    },
+    "./runtime/chat": {
+      "types": "./dist/public/runtime/chat.d.ts",
+      "import": "./dist/public/runtime/chat.js",
+      "default": "./dist/public/runtime/chat.js"
+    },
+    "./runtime/canvas": {
+      "types": "./dist/public/runtime/canvas.d.ts",
+      "import": "./dist/public/runtime/canvas.js",
+      "default": "./dist/public/runtime/canvas.js"
+    },
+    "./types": {
+      "types": "./dist/public/types.d.ts",
+      "import": "./dist/public/types.js",
+      "default": "./dist/public/types.js"
+    },
+    "./options": {
+      "types": "./dist/public/options.d.ts",
+      "import": "./dist/public/options.js",
+      "default": "./dist/public/options.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check:exports:naming": "node scripts/check-public-export-prefixes.mjs"
+  },
+  "dependencies": {
+    "zod": "^3.25.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.4"
+  }
+}

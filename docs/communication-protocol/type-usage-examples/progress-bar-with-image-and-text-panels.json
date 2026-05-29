@@ -1,0 +1,102 @@
+{
+  "message_id": "multi-progress-001",
+  "message_type": "CHAT_MESSAGE",
+  "message_role": "ASSISTANT",
+  "message_target": "CHAT",
+  "message_contents": [
+    {
+      "content_id": "status-header",
+      "content_queue": "main",
+      "content_type": "CHAT_CONTENT_MARKDOWN",
+      "content_width": "WIDTH_FULL",
+      "content_data": {
+        "markdown": "**Processing Multiple Operations**\n\nTracking progress across different tasks:",
+        "markdown_style": "DEFAULT"
+      }
+    },
+    {
+      "content_id": "web-search-panel",
+      "content_queue": "main",
+      "content_type": "CHAT_CONTENT_PANEL",
+      "content_width": "WIDTH_FULL",
+      "content_group_id": "web-search-group",
+      "content_data": {
+        "panel_header_icon": "panel-icon-web-search",
+        "panel_header_title": "Web Search",
+        "panel_header_description": "Searching the web for information and showing markdown with contents being found in the panel_body",
+
+        "panel_body_type": "PANEL_BODY_MARKDOWN",
+        "panel_body_aspect_ratio": "16/9",
+
+        "panel_body_data": {
+          "markdown": "Found 10 results... \n\nResult 1: \n\nResult 2: \n\nResult 3: \n\nResult 4: \n\nResult 5: \n\nResult 6: \n\nResult 7: \n\nResult 8: \n\nResult 9: \n\nResult 10: "
+        }
+      }
+    },
+    {
+      "content_id": "web-search-progress",
+      "content_queue": "main",
+      "content_type": "CHAT_CONTENT_PROGRESS_BAR",
+      "content_width": "WIDTH_FULL",
+      "content_group_id": "web-search-group",
+      "content_data": {
+        "progress_bar_state": "IN_PROGRESS",
+        "progress_bar_visibility": "VISIBLE",
+        "progress_bar_current_percentage": 75,
+        "progress_bar_current_animation_duration_ms": 1200,
+        "progress_bar_next_goal_delay_ms": 400,
+        "progress_bar_next_goal_percentage": 100,
+        "progress_bar_next_goal_animation_duration_ms": 800,
+        "progress_bar_message": "Uploading dataset file...",
+        "progress_bar_icon": "progress-bar-icon-web"
+      }
+    },
+
+    {
+      "content_id": "website-crawling-panel",
+      "content_queue": "main",
+      "content_type": "CHAT_CONTENT_PANEL",
+      "content_width": "WIDTH_FULL",
+      "content_group_id": "website-crawling-group",
+      "content_data": {
+        "panel_header_icon": "panel-icon-website-crawling",
+        "panel_header_title": "Data Processing",
+        "panel_header_description": "Processing data for analysis and showing image in the panel_body",
+
+        "panel_body_type": "PANEL_BODY_IMAGE",
+        "panel_body_aspect_ratio": "4/3",
+        "panel_body_data": {
+          "image_url": "https://example.com/image.png",
+          "image_alt_text": "Home Page",
+          "image_gravity": "IMAGE_GRAVITY_TOP_CENTER",
+          "image_sizing": "IMAGE_SIZING_COVER",
+
+          "image_animation_type": "IMAGE_ANIMATION_SCROLL_DOWN",
+          "image_animation_framer_motion_attributes": {
+            "delay": 0.5,
+            "duration": 2.5,
+            "ease": "easeInOut"
+          }
+        }
+      }
+    },
+    {
+      "content_id": "website-crawling-progress",
+      "content_queue": "main",
+      "content_type": "CHAT_CONTENT_PROGRESS_BAR",
+      "content_width": "WIDTH_FULL",
+      "content_group_id": "website-crawling-group",
+      "content_data": {
+        "progress_bar_state": "IN_PROGRESS",
+        "progress_bar_visibility": "VISIBLE",
+        "progress_bar_current_percentage": 45,
+        "progress_bar_current_animation_duration_ms": 1500,
+        "progress_bar_next_goal_delay_ms": 300,
+        "progress_bar_next_goal_percentage": 75,
+        "progress_bar_next_goal_animation_duration_ms": 1200,
+        "progress_bar_message": "Processing data records...",
+        "progress_bar_icon": "progress-bar-icon-web"
+      }
+    }
+  ]
+}
