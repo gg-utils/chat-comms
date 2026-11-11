@@ -1,6 +1,6 @@
 {
   "name": "@gg-utils/chat-comms",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Reusable chat stream protocol contracts, schemas, builders, and stream helpers for protocol producers and UI consumers.",
   "type": "module",
   "license": "MIT",
@@ -69,13 +69,14 @@
   },
   "scripts": {
     "build": "tsc",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && npm run typecheck:type-tests",
+    "typecheck:type-tests": "tsc --noEmit -p tsconfig.type-tests.json",
     "test": "vitest run",
     "test:watch": "vitest",
     "check:exports:naming": "node scripts/check-public-export-prefixes.mjs",
     "lint": "eslint src --max-warnings 0",
     "check:dist": "npm run build && git diff --exit-code -- dist && node scripts/check-dist-untracked.mjs",
-    "type-check": "tsc --noEmit"
+    "type-check": "npm run typecheck"
   },
   "dependencies": {
     "zod": "^3.25.3 || ^4.0.0"
