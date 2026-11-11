@@ -4,7 +4,7 @@
   "private": true,
   "description": "Reusable chat stream protocol contracts, schemas, builders, and stream helpers for protocol producers and UI consumers.",
   "type": "module",
-  "license": "0BSD",
+  "license": "MIT",
   "sideEffects": false,
   "exports": {
     "./wire": {
