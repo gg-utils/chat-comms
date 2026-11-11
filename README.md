@@ -135,8 +135,13 @@ npm run build
 Add this dependency to your `package.json` and install normally; compiled ESM and declarations are included in the tag, with no consumer build step.
 
 ```json
-"@gg-utils/chat-comms": "git+https://github.com/gg-utils/chat-comms.git#v0.2.0"
+"@gg-utils/chat-comms": "git+https://github.com/gg-utils/chat-comms.git#v0.3.0"
 ```
+
+Version 0.3.0 adds three optional typed fields to the actionable card item (`card_body`,
+`card_fields`, `card_action_id`) and a `display_only` option on the card builder. It is
+backward compatible with 0.2.0 except for one narrowing: a payload that already sent one of
+those three keys with a wrong shape is now rejected.
 
 Requires Node `>=22.0.0 <27` (Node 22, 24, and 26).
 
