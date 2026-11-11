@@ -20,7 +20,7 @@
  * @documentation reviewed=2026-04-13 standard=FILE_OVERVIEW_STANDARDS_TYPESCRIPT@3
  */
 import type { CanvasContent, CommunicationProtocol_ChatAction } from "../types/index.js";
-import type { ActionableCardSelectionMode, ActionableCardSelectionState, ActionableChipSelectionMode, ActionableChipSelectionState, ButtonStyle, ChatButtonState, ChipState, ChipStyle, CommunicationProtocol_BaseActionableCardContentOptions, CommunicationProtocol_BaseActionableChipContentOptions, CommunicationProtocol_BaseContentOptions, CommunicationProtocol_BaseIdResolutionOptions, CommunicationProtocol_BasePanelOptions, CommunicationProtocol_BaseProgressOptions, MarkdownStyle, PanelBodyType, SectionStyle } from "../types/common.js";
+import type { ActionableCardSelectionMode, ActionableCardSelectionState, ActionableChipSelectionMode, ActionableChipSelectionState, ButtonStyle, ChatButtonState, ChipState, ChipStyle, CommunicationProtocol_ActionableCardField, CommunicationProtocol_BaseActionableCardContentOptions, CommunicationProtocol_BaseActionableChipContentOptions, CommunicationProtocol_BaseContentOptions, CommunicationProtocol_BaseIdResolutionOptions, CommunicationProtocol_BasePanelOptions, CommunicationProtocol_BaseProgressOptions, MarkdownStyle, PanelBodyType, SectionStyle } from "../types/common.js";
 import type { AllAction } from "../types/unions.js";
 /**
  * Options for creating CHAT_CONTENT_MARKDOWN content
@@ -88,6 +88,31 @@ export interface CommunicationProtocol_CardOptions {
      * @required
      */
     subtitle: string;
+    /**
+     * Longer text shown under the title, written to `card_body`
+     * It is separate from the subtitle and is never merged into it
+     * @optional
+     */
+    body?: string;
+    /**
+     * Labelled values in display order, written to `card_fields`
+     * @optional
+     */
+    fields?: CommunicationProtocol_ActionableCardField[];
+    /**
+     * Identifier of the follow-up action that choosing the card starts, written to `card_action_id`
+     * Must be a non-empty string. It does not replace `actions`: the action list is still what runs
+     * @optional
+     */
+    action_id?: string;
+    /**
+     * Build a card that cannot be chosen: `card_actions` is written as an empty list and no
+     * choose-card action is generated, so no message ID is needed for this card
+     * Cannot be combined with `actions` or `action_id`, because a card that cannot be chosen
+     * starts nothing. Defaults to false, which keeps the generated choose-card action
+     * @optional
+     */
+    display_only?: boolean;
     /**
      * Unique value identifier for this card option
      * Used in action data when the card is selected

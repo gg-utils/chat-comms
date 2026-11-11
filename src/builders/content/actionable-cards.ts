@@ -120,7 +120,8 @@ export class CommunicationProtocol_ActionableCardsContentBuilder {
 
   /**
    * Add a card with actions using deconstructable options
-   * Actions are automatically generated if not provided
+   * Actions are automatically generated if not provided, unless `display_only` is set,
+   * which writes an empty action list so the card cannot be chosen
    *
    * @param options - Card configuration options
    * @returns This builder instance for method chaining
@@ -128,13 +129,29 @@ export class CommunicationProtocol_ActionableCardsContentBuilder {
   addCard({
     title,
     subtitle,
+    body,
+    fields,
+    action_id: cardActionId,
+    display_only: displayOnly = false,
     value,
     actions,
     simulated_user_message_text,
   }: CommunicationProtocol_CardOptions): CommunicationProtocol_ActionableCardsContentBuilder {
+    if (cardActionId !== undefined && cardActionId.length === 0) {
+      throw new Error("Card action_id must be a non-empty string when provided");
+    }
+
+    // The action list is the only selectable signal, so a display-only card must not carry
+    // anything that says it can be chosen.
+    if (displayOnly && ((actions && actions.length > 0) || cardActionId !== undefined)) {
+      throw new Error("A display_only card cannot have actions or an action_id");
+    }
+
     let processedActions: CommunicationProtocol_ChatAction[];
 
-    if (actions && actions.length > 0) {
+    if (displayOnly) {
+      processedActions = [];
+    } else if (actions && actions.length > 0) {
       // Use provided actions
       processedActions = actions;
     } else {
@@ -175,6 +192,10 @@ export class CommunicationProtocol_ActionableCardsContentBuilder {
     (this.content.content_data.actionable_cards_items as unknown[]).push({
       card_title: title,
       card_subtitle: subtitle,
+      // Optional typed fields are written only when given, so cards without them keep their shape.
+      ...(body !== undefined && { card_body: body }),
+      ...(fields !== undefined && { card_fields: fields.map((field) => ({ ...field })) }),
+      ...(cardActionId !== undefined && { card_action_id: cardActionId }),
       card_value: value,
       card_actions: processedActions,
     });

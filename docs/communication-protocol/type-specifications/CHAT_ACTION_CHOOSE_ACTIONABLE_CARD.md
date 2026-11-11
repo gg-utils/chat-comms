@@ -156,6 +156,14 @@ For comprehensive usage examples and practical implementation scenarios, please 
 
 5. **Rich Information Display**: Cards can display complex information including descriptions, metadata, and visual elements, making them ideal for choices that benefit from detailed context.
 
+## Relation to `card_action_id`
+
+A card item may carry an optional `card_action_id`. It is not the `action_id` of this action and is
+not required to equal it: this action stays the entry in `card_actions` that a consumer executes
+when the card is chosen, and `card_action_id` only names the follow-up action that the producer
+starts afterwards. See
+[Typed Optional Card Fields](./CHAT_CONTENT_ACTIONABLE_CARDS.md#typed-optional-card-fields).
+
 ## Card Selection Behavior
 
 ### Single Selection Mode

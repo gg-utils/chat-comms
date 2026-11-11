@@ -57,8 +57,14 @@ description: "Specification for CHAT_CONTENT_ACTIONABLE_CARDS in the communicati
 
 ### Optional Properties
 
+- **card_body**: Longer text shown under the title. It is separate from `card_subtitle`
+- **card_fields**: Ordered array of `{ "label": string, "value": string }` items
+- **card_action_id**: Non-empty identifier of the follow-up action. Present only when the card can be chosen
 - **card_style**: "PRIMARY" | "SECONDARY" | "TERTIARY"
 - **card_state**: "ENABLED" | "DISABLED" | "LOADING"
+
+See [Typed Optional Card Fields](#typed-optional-card-fields) for validation rules and for how
+`card_action_id` relates to `card_actions`.
 
 ### Selection Modes
 
@@ -137,6 +143,27 @@ The complete schema for `CHAT_CONTENT_ACTIONABLE_CARDS` adheres to the following
                 "type": "string",
                 "description": "Secondary description text for the card."
               },
+              "card_body": {
+                "type": "string",
+                "description": "Optional longer text shown under the title. Separate from card_subtitle."
+              },
+              "card_fields": {
+                "type": "array",
+                "description": "Optional labelled values. Array order is the display order.",
+                "items": {
+                  "type": "object",
+                  "required": ["label", "value"],
+                  "properties": {
+                    "label": { "type": "string" },
+                    "value": { "type": "string" }
+                  }
+                }
+              },
+              "card_action_id": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Optional identifier of the follow-up action. Present only when the card can be chosen."
+              },
               "card_value": {
                 "type": "string",
                 "description": "Value associated with the card for processing."
@@ -189,6 +216,9 @@ const actionSchema = z.object({
 const cardItemSchema = z.object({
   card_title: z.string(), // Updated: was 'title'
   card_subtitle: z.string(), // Updated: was 'subtitle'
+  card_body: z.string().optional(),
+  card_fields: z.array(z.object({ label: z.string(), value: z.string() }).passthrough()).optional(),
+  card_action_id: z.string().min(1).optional(),
   card_value: z.string(), // Updated: was 'value'
   card_actions: z.array(actionSchema), // Updated: was 'actions'
 });
@@ -237,6 +267,11 @@ const actionSchema = Joi.object({
 const cardItemSchema = Joi.object({
   card_title: Joi.string().required(), // Updated: was 'title'
   card_subtitle: Joi.string().required(), // Updated: was 'subtitle'
+  card_body: Joi.string().allow(""),
+  card_fields: Joi.array().items(
+    Joi.object({ label: Joi.string().allow("").required(), value: Joi.string().allow("").required() }).unknown(true)
+  ),
+  card_action_id: Joi.string().min(1),
   card_value: Joi.string().required(), // Updated: was 'value'
   card_actions: Joi.array().items(actionSchema).required(), // Updated: was 'actions'
 });
@@ -287,6 +322,9 @@ const actionSchema = yup.object().shape({
 const cardItemSchema = yup.object().shape({
   card_title: yup.string().required(), // Updated: was 'title'
   card_subtitle: yup.string().required(), // Updated: was 'subtitle'
+  card_body: yup.string(),
+  card_fields: yup.array().of(yup.object({ label: yup.string().defined(), value: yup.string().defined() })),
+  card_action_id: yup.string().min(1),
   card_value: yup.string().required(), // Updated: was 'value'
   card_actions: yup.array().of(actionSchema).required(), // Updated: was 'actions'
 });
@@ -323,6 +361,99 @@ The schema for items within `actionable_cards_items` is defined as part of the `
 - `card_subtitle` (string, required) - Secondary description text for the card
 - `card_value` (string, required) - Value associated with the card for processing
 - `card_actions` (array of Action objects, required) - Actions to execute when card is selected
+- `card_body` (string, optional) - Longer text shown under the title
+- `card_fields` (array of `{ label, value }` objects, optional) - Labelled values in display order
+- `card_action_id` (non-empty string, optional) - Identifier of the follow-up action of a card that can be chosen
+
+## Typed Optional Card Fields
+
+Three optional fields extend a card item. A card that carries none of them is validated and
+rendered exactly as before, and unknown keys on a card item still pass through unchanged.
+
+| Property         | Type                                 | Required | Description                                                                                                         |
+| ---------------- | ------------------------------------ | -------- | ------------------------------------------------------------------------------------------------------------------- |
+| `card_body`      | string                               | No       | Longer text shown under the title. It is its own field: producers must not fold it into `card_subtitle`.            |
+| `card_fields`    | array of `{ label, value }` objects  | No       | Labelled values. Array order is the display order; consumers must not sort or deduplicate the items.                |
+| `card_action_id` | string, at least one character       | No       | Identifier of the follow-up action that choosing the card starts. A card without it is display-only.                |
+
+### Validation
+
+The package schema (`ChatComms_Schema_ChatActionableCardItemSchema`) and the strict validators
+**reject** a payload when one of these fields is present with an invalid value. An invalid value is
+never dropped or repaired, because that would change the meaning of the card without the producer
+noticing.
+
+- `card_body` must be a string. An empty string is accepted.
+- `card_fields` must be an array. Each item must be an object with a string `label` and a string
+  `value`; empty strings are accepted, and an empty array is accepted. Unknown keys on an item pass
+  through. Parsing and serializing keep the array order.
+- `card_action_id` must be a string of at least one character. To mark a card as display-only,
+  leave the key out; `""` and `null` are rejected.
+
+The loose guards do not inspect card items, so they are unaffected by these fields.
+
+### Relation Between `card_action_id` and `card_actions`
+
+`card_actions` keeps its meaning and stays the only thing a consumer executes: the list of actions
+that run, in order, when the card is chosen. A card that can be chosen carries at least one action
+there, normally one `CHAT_ACTION_CHOOSE_ACTIONABLE_CARD`. A card with an empty `card_actions` list
+is not selectable.
+
+`card_action_id` does not replace that list and is not executed. It names the follow-up action that
+the producer starts after the choice, so that a consumer can report the choice with a stable
+identifier.
+
+- It is an opaque identifier owned by the producer. It is **not** required to equal the `action_id`
+  of any entry in `card_actions`.
+- Both fields say whether a card can be chosen, so a producer must keep them consistent: send
+  `card_action_id` together with a non-empty `card_actions` list, or send neither (leave
+  `card_action_id` out and send `"card_actions": []`).
+- The schema validates each field alone and does **not** check them against each other. A payload
+  where they disagree still parses.
+- If they disagree, a consumer follows `card_actions`: an empty list means the card is not
+  selectable even when `card_action_id` is present, and a non-empty list means the card can be
+  chosen even when `card_action_id` is absent.
+
+### Example
+
+```json
+{
+  "card_title": "Sample Plan A",
+  "card_subtitle": "Short summary",
+  "card_body": "A longer description of Sample Plan A, shown under the title.",
+  "card_fields": [
+    { "label": "Duration", "value": "2 weeks" },
+    { "label": "Effort", "value": "Low" }
+  ],
+  "card_action_id": "follow-up-plan-a",
+  "card_value": "plan-a",
+  "card_actions": [
+    {
+      "action_id": "msg-001-select-plan-a",
+      "action_type": "CHAT_ACTION_CHOOSE_ACTIONABLE_CARD",
+      "action_data": {
+        "target": "CHAT",
+        "actionable_cards_content_id": "msg-001-cards-plans",
+        "selected_card_value": "plan-a",
+        "selected_card_title": "Sample Plan A"
+      }
+    }
+  ]
+}
+```
+
+A display-only card leaves `card_action_id` out and sends an empty action list:
+
+```json
+{
+  "card_title": "Sample Note",
+  "card_subtitle": "For reference only",
+  "card_body": "This card only displays information and cannot be chosen.",
+  "card_fields": [{ "label": "Status", "value": "Informational" }],
+  "card_value": "note",
+  "card_actions": []
+}
+```
 
 ### Selection Modes
 

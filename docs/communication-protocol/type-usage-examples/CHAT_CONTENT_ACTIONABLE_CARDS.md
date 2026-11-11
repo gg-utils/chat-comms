@@ -302,8 +302,15 @@ I'll offer different analysis methods for your organization data:
 
 ### Optional Properties
 
+- **card_body**: Longer text shown under the title. It is separate from `card_subtitle`
+- **card_fields**: Ordered array of `{ "label": string, "value": string }` items
+- **card_action_id**: Non-empty identifier of the follow-up action. Present only when the card can be chosen
 - **card_style**: "PRIMARY" | "SECONDARY" | "TERTIARY"
 - **card_state**: "ENABLED" | "DISABLED" | "LOADING"
+
+See [Typed Optional Card Fields](../type-specifications/CHAT_CONTENT_ACTIONABLE_CARDS.md#typed-optional-card-fields)
+in the specification for validation rules, and [Cards With Body, Fields, and a Follow-Up Action](#cards-with-body-fields-and-a-follow-up-action)
+below for a payload.
 
 ### Selection Modes
 
@@ -315,6 +322,104 @@ I'll offer different analysis methods for your organization data:
 - **PENDING_SELECTION**: Awaiting user interaction
 - **SELECTED**: User has made selection
 - **COMPLETED**: Selection processed
+
+### Cards With Body, Fields, and a Follow-Up Action
+
+The first card can be chosen: it carries `card_action_id` and one choose-card action. The second is
+display-only: it has no `card_action_id` and an empty `card_actions` list. `card_fields` items are
+shown in array order.
+
+**Content Payload**
+
+```json
+{
+  "content_id": "msg-001-cards-plans",
+  "content_type": "CHAT_CONTENT_ACTIONABLE_CARDS",
+  "content_queue": "main",
+  "content_data": {
+    "actionable_cards_selection_mode": "SINGLE",
+    "actionable_cards_selection_state": "PENDING_SELECTION",
+    "actionable_cards_items": [
+      {
+        "card_title": "Sample Plan A",
+        "card_subtitle": "Short summary",
+        "card_body": "A longer description of Sample Plan A, shown under the title.",
+        "card_fields": [
+          { "label": "Duration", "value": "2 weeks" },
+          { "label": "Effort", "value": "Low" }
+        ],
+        "card_action_id": "follow-up-plan-a",
+        "card_value": "plan-a",
+        "card_actions": [
+          {
+            "action_id": "msg-001-select-plan-a",
+            "action_type": "CHAT_ACTION_CHOOSE_ACTIONABLE_CARD",
+            "action_data": {
+              "target": "CHAT",
+              "actionable_cards_content_id": "msg-001-cards-plans",
+              "selected_card_value": "plan-a",
+              "selected_card_title": "Sample Plan A"
+            }
+          }
+        ]
+      },
+      {
+        "card_title": "Sample Note",
+        "card_subtitle": "For reference only",
+        "card_body": "This card only displays information and cannot be chosen.",
+        "card_fields": [{ "label": "Status", "value": "Informational" }],
+        "card_value": "note",
+        "card_actions": []
+      }
+    ]
+  }
+}
+```
+
+The same payload is exported as `ChatComms_Fixture_ActionableCardsTypedFieldsMessage` from
+`@gg-utils/chat-comms/fixtures`.
+
+**Builder**
+
+```ts
+import { ChatComms_Builder_CommunicationProtocol_ActionableCardsContentBuilder } from "@gg-utils/chat-comms/builders";
+
+const content = new ChatComms_Builder_CommunicationProtocol_ActionableCardsContentBuilder({
+  content_queue: "main",
+  content_id_suffix: "cards-plans",
+  message_id: "msg-001",
+})
+  .addCard({
+    title: "Sample Plan A",
+    subtitle: "Short summary",
+    body: "A longer description of Sample Plan A, shown under the title.",
+    fields: [
+      { label: "Duration", value: "2 weeks" },
+      { label: "Effort", value: "Low" },
+    ],
+    action_id: "follow-up-plan-a",
+    value: "plan-a",
+  })
+  .build();
+```
+
+`body`, `fields`, and `action_id` are written to `card_body`, `card_fields`, and `card_action_id`
+only when given. The builder generates the choose-card action for `card_actions` when no
+`actions` are passed, so by default it produces a card that can be chosen.
+
+Pass `display_only: true` for a card that cannot be chosen. The builder then writes an empty
+`card_actions` list and generates no action, so that card needs no message ID. `display_only`
+cannot be combined with `actions` or `action_id`:
+
+```ts
+builder.addCard({
+  title: "Sample Plan B",
+  subtitle: "Short summary",
+  body: "Shown for information only.",
+  value: "plan-b",
+  display_only: true,
+});
+```
 
 ---
 

@@ -9,6 +9,12 @@ export declare const FIXTURE_DEBUG_MESSAGE: ProtocolChatMessage;
 export declare const FIXTURE_NON_DEBUG_MESSAGE: ProtocolChatMessage;
 export declare const FIXTURE_DEBUG_FENCED_BLOCK: string;
 export declare const FIXTURE_NON_DEBUG_FENCED_BLOCK: string;
+/**
+ * Actionable cards using the typed optional card fields. The first card can be chosen:
+ * it carries `card_action_id` and one choose-card action. The second is display-only:
+ * it has no `card_action_id` and an empty `card_actions` list.
+ */
+export declare const FIXTURE_ACTIONABLE_CARDS_TYPED_FIELDS_MESSAGE: ProtocolChatMessage;
 export declare const FIXTURE_WAIT_FOR_QUEUES_DRAIN: ProtocolAction;
 export declare const FIXTURE_WAIT_FOR_QUEUES_IDLE: ProtocolAction;
 export declare const FIXTURE_WAIT_FOR_QUEUES_CONTENT_IDS: ProtocolAction;

@@ -84,4 +84,26 @@ export declare const FIXTURE_INVALID_UNKNOWN_TARGET_ACTION: {
 };
 export declare const FIXTURE_INVALID_UPPERCASE_JSON_FENCE = "```JSON\n{\"message_type\":\"CHAT_MESSAGE\"}\n```";
 export declare const FIXTURE_INVALID_JAVASCRIPT_FENCE = "```javascript\n{\"message_type\":\"CHAT_MESSAGE\"}\n```";
+/** Actionable cards whose `card_action_id` is an empty string; strict validation rejects it. */
+export declare const FIXTURE_INVALID_CARD_ACTION_ID_EMPTY: {
+    message_id: string;
+    message_type: string;
+    message_role: string;
+    message_target: string;
+    message_contents: {
+        content_id: string;
+        content_type: string;
+        content_queue: string;
+        content_data: {
+            actionable_cards_selection_mode: string;
+            actionable_cards_selection_state: string;
+            actionable_cards_items: {
+                card_title: string;
+                card_action_id: string;
+                card_value: string;
+                card_actions: never[];
+            }[];
+        };
+    }[];
+};
 //# sourceMappingURL=negative.d.ts.map

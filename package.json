@@ -1,6 +1,6 @@
 {
   "name": "@gg-utils/chat-comms",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Reusable chat stream protocol contracts, schemas, builders, and stream helpers for protocol producers and UI consumers.",
   "type": "module",
   "license": "MIT",
