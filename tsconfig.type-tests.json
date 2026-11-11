@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false,
+    "strict": true,
+    "exactOptionalPropertyTypes": true
+  },
+  "include": [
+    "src/**/*.type-test.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

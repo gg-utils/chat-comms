@@ -83,12 +83,19 @@ export type JsonArray = JsonValue[];
 /** Recursive union covering all valid JSON values. */
 export type JsonValue = JsonPrimitive | JsonObject | JsonArray;
 
-/** Top-level chat message envelope parsed from the streaming protocol. Carries all content items for one assistant or user turn. */
+/**
+ * Top-level chat message envelope parsed from the streaming protocol. Carries all content items for one assistant or user turn.
+ *
+ * @remarks
+ * `message_target` is always `"CHAT"`, as in the protocol chat message: the strict schema and the
+ * loose runtime-message classifier both reject any other target. App and canvas effects travel as
+ * wrapped actions inside the message contents.
+ */
 export interface ChatMessage {
   message_id: string;
   message_type: "CHAT_MESSAGE";
   message_role: "USER" | "ASSISTANT";
-  message_target: "CHAT" | "CANVAS" | "APP";
+  message_target: "CHAT";
   debug?: boolean;
   message_contents: AllChatContent[];
   raw_content?: string;
@@ -491,14 +498,22 @@ export type AllChatContent =
   | ButtonContent
   | ActionWrapperContent;
 
-/** Data payload for a `CHAT_CONTENT_MARKDOWN` content item. */
-export interface MarkdownContentData {
+/**
+ * Data payload for a `CHAT_CONTENT_MARKDOWN` content item.
+ *
+ * @remarks
+ * The chat content data shapes are type aliases, not interfaces, on purpose: the protocol chat
+ * content types `content_data` as `Record<string, unknown>`, and only an object type alias is
+ * implicitly assignable to an index signature. Keep them as aliases so a runtime content item can
+ * be passed where the protocol chat content is expected.
+ */
+export type MarkdownContentData = {
   markdown?: string;
   streaming_options?: StreamingOptions;
-}
+};
 
 /** Data payload for a `CHAT_CONTENT_PROGRESS_BAR` content item, including state, animation, and icon tokens. */
-export interface ProgressBarContentData {
+export type ProgressBarContentData = {
   progress_bar_state:
     | "IN_PROGRESS"
     | "COMPLETED"
@@ -531,7 +546,7 @@ export interface ProgressBarContentData {
     | "progress-bar-icon-database"
     | "progress-bar-icon-api"
     | "progress-bar-icon-security";
-}
+};
 
 /**
  * Shared protocol-level panel metadata merged into every `ChatContentPanelData` discriminant arm.
@@ -539,7 +554,7 @@ export interface ProgressBarContentData {
  * @remarks
  * Intersected with body-specific variants in `ChatContentPanelData` (`panel_body_type` narrows `panel_body_data`).
  */
-interface BaseChatContentPanelData {
+type BaseChatContentPanelData = {
   panel_header_icon?:
     | "panel-icon-web"
     | "panel-icon-chatgpt"
@@ -570,7 +585,7 @@ interface BaseChatContentPanelData {
   panel_transitions?: PanelTransitions;
   panel_effects?: PanelEffects;
   should_have_scanning_line_animation?: boolean;
-}
+};
 
 /** Protocol-level discriminated union of all panel body variants, keyed by `panel_body_type`. Consumed by the content panel renderer. */
 export type ChatContentPanelData =
@@ -812,7 +827,7 @@ export interface ChatContentPanelBodyGoogleMapsReviewsData {
 }
 
 /** Data payload for a `CHAT_CONTENT_ACTIONABLE_CARDS` content item. */
-export interface ActionableCardsContentData {
+export type ActionableCardsContentData = {
   actionable_cards_selected_indexes: number[];
   actionable_cards_selection_mode: "SINGLE" | "MULTIPLE";
   actionable_cards_selection_state:
@@ -820,27 +835,27 @@ export interface ActionableCardsContentData {
     | "SELECTED"
     | "UNSELECTED";
   actionable_cards_items: ActionableCard[];
-}
+};
 
 /** Data payload for a `CHAT_CONTENT_ACTIONABLE_CHIPS` content item. */
-export interface ActionableChipsContentData {
+export type ActionableChipsContentData = {
   actionable_chips_selection_mode: "SINGLE" | "MULTIPLE";
   actionable_chips_selection_state:
     | "PENDING_SELECTION"
     | "SELECTED"
     | "UNSELECTED";
   actionable_chips_items: ActionableChip[];
-}
+};
 
 /** Data payload for a `CHAT_CONTENT_BUTTON` content item. */
-export interface ButtonContentData {
+export type ButtonContentData = {
   button_id: string;
   button_text: string;
   button_state: "ENABLED" | "DISABLED" | "LOADING";
   button_style?: ChatButtonStyle;
   button_actions: ChatAction[];
   button_icon: string;
-}
+};
 
 /** Action data for `CHAT_ACTION_UPDATE_PROGRESS_BAR`: partial update fields for an existing progress bar content item. */
 export interface UpdateProgressBarActionData {
@@ -958,9 +973,9 @@ export interface WaitForQueuesActionData {
 }
 
 /** Data payload for a `CHAT_CONTENT_ACTION_WRAPPER` content item — carries a single inline action to be processed immediately. */
-export interface ActionWrapperContentData {
+export type ActionWrapperContentData = {
   action: ChatAction;
-}
+};
 
 /** Shared base for all chat action types — carries a unique `action_id`. */
 export interface BaseChatAction {
@@ -1449,9 +1464,9 @@ export interface StreamingState {
 /** Narrow action union for use cases that only need to handle text-message sending and button updates. */
 export type AllChatActions = SendTextMessageAction | UpdateButtonAction;
 
-/** Data for a `CANVAS_CONTENT_MARKDOWN` canvas item, including optional style variant. */
+/** Data for a `CANVAS_CONTENT_MARKDOWN` canvas item, including optional style variant. `markdown` is required, as in the protocol contract and the schema. */
 export interface CanvasMarkdownContentData {
-  markdown?: string;
+  markdown: string;
   markdown_style?: "DEFAULT" | "COMPACT" | "LARGE";
 }
 

@@ -135,13 +135,22 @@ npm run build
 Add this dependency to your `package.json` and install normally; compiled ESM and declarations are included in the tag, with no consumer build step.
 
 ```json
-"@gg-utils/chat-comms": "git+https://github.com/gg-utils/chat-comms.git#v0.3.0"
+"@gg-utils/chat-comms": "git+https://github.com/gg-utils/chat-comms.git#v0.3.1"
 ```
 
 Version 0.3.0 adds three optional typed fields to the actionable card item (`card_body`,
 `card_fields`, `card_action_id`) and a `display_only` option on the card builder. It is
 backward compatible with 0.2.0 except for one narrowing: a payload that already sent one of
 those three keys with a wrong shape is now rejected.
+
+Version 0.3.1 changes types only; the wire format, the schemas and the runtime behaviour are
+unchanged. The `/runtime/chat` content items, chat message and canvas actions are now assignable
+to the `/types` protocol chat content, chat message and canvas action, so passing one where the
+other is expected no longer needs a cast. To get there the runtime chat content data shapes
+became type aliases instead of interfaces (they can no longer be declaration-merged), the runtime
+chat message `message_target` is narrowed to `"CHAT"`, and `markdown` is required on the runtime
+canvas markdown data, both as the schemas already demanded. Runtime chat actions are not
+assignable to the protocol chat action and still need narrowing or mapping.
 
 Requires Node `>=22.0.0 <27` (Node 22, 24, and 26).
 
