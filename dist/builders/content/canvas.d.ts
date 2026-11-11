@@ -26,8 +26,8 @@
 import type { CommunicationProtocol_CanvasHtmlContentOptions, CommunicationProtocol_CanvasMarkdownContentOptions, CommunicationProtocol_CanvasSectionContentOptions } from "../../options/content-options.js";
 import type { CommunicationProtocol_CanvasHtmlContent, CommunicationProtocol_CanvasMarkdownContent, CommunicationProtocol_CanvasSectionContent } from "../../types/canvas.js";
 interface CanvasContentMetadata {
-    toc_label?: string;
-    toc_key?: string;
+    toc_label?: string | undefined;
+    toc_key?: string | undefined;
     section_data?: unknown;
 }
 type CanvasContentMetadataForSectionData<SectionData> = Omit<CanvasContentMetadata, "section_data"> & {

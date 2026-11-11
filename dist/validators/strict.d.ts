@@ -1,7 +1,7 @@
 /**
  * Strict validation using Zod schemas.
  */
-import type { SafeParseReturnType } from "zod";
+import type { SafeParseReturnType } from "zod/v3";
 import { type ProtocolAction_Strict, type ProtocolChatMessage_Strict } from "../schemas/index.js";
 /** Result of strict protocol message validation. */
 export type StrictMessageParseResult = SafeParseReturnType<unknown, ProtocolChatMessage_Strict>;

@@ -36,7 +36,7 @@ import type { ActionableCardSelectionMode, ActionableCardSelectionState, Content
  */
 export declare class CommunicationProtocol_ActionableCardsContentBuilder {
     private content;
-    private messageId?;
+    private messageId;
     /**
      * Initialize the actionable cards content builder
      *

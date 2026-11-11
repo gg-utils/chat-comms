@@ -1,7 +1,6 @@
 {
   "name": "@gg-utils/chat-comms",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.2.0",
   "description": "Reusable chat stream protocol contracts, schemas, builders, and stream helpers for protocol producers and UI consumers.",
   "type": "module",
   "license": "MIT",
@@ -73,13 +72,31 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check:exports:naming": "node scripts/check-public-export-prefixes.mjs"
+    "check:exports:naming": "node scripts/check-public-export-prefixes.mjs",
+    "lint": "eslint src --max-warnings 0",
+    "check:dist": "npm run build && git diff --exit-code -- dist && node scripts/check-dist-untracked.mjs",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "zod": "^3.25.3"
+    "zod": "^3.25.3 || ^4.0.0"
   },
   "devDependencies": {
-    "typescript": "^5.8.3",
-    "vitest": "^3.1.4"
-  }
+    "@eslint/js": "9.39.4",
+    "eslint": "9.39.4",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.72.2",
+    "vitest": "3.2.4"
+  },
+  "engines": {
+    "node": ">=22.0.0 <27"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gg-utils/chat-comms.git"
+  },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ]
 }

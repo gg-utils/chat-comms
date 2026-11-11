@@ -39,7 +39,7 @@ export class CommunicationProtocol_UpdateProgressBarActionBuilder {
      * @param options - Configuration options for the update progress bar action
      */
     constructor(options) {
-        const { content_id, progress_bar_state: state, progress_bar_visibility: visibility, progress_bar_current_percentage, progress_bar_current_animation_duration_ms, progress_bar_next_goal_delay_ms, progress_bar_next_goal_percentage, progress_bar_next_goal_animation_duration_ms: nextGoalAnimationDurationMs, progress_bar_message: message, progress_bar_icon: icon, message_id, } = options;
+        const { content_id, progress_bar_state: state, progress_bar_visibility: visibility, progress_bar_current_percentage, progress_bar_current_animation_duration_ms, progress_bar_next_goal_delay_ms, progress_bar_next_goal_percentage, progress_bar_next_goal_animation_duration_ms: nextGoalAnimationDurationMs, progress_bar_message: message, progress_bar_icon: icon, } = options;
         this.action = {
             action_id: ProtocolIdUtils.resolveActionId(options),
             action_type: "CHAT_ACTION_UPDATE_PROGRESS_BAR",

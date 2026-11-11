@@ -362,7 +362,7 @@ export class CommunicationProtocol_PanelContentBuilder {
    */
   validateAnimationConfig() {
     return CommunicationProtocol_Panel_validatePanelAnimationConfig(
-      this.content.content_data as Record<string, unknown>
+      this.content.content_data
     );
   }
 

@@ -158,7 +158,7 @@ export const ProtocolIdUtils = {
  */
 export class ProtocolIdUtils_SequenceManager {
   private readonly baseMessageId: string;
-  private readonly logger?: ProtocolIdUtils_SequenceManagerLogger;
+  private readonly logger: ProtocolIdUtils_SequenceManagerLogger | undefined;
   private readonly logPrefix: string;
   private readonly errorPrefix: string;
   private currentSequenceId: string;

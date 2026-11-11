@@ -63,7 +63,7 @@ export type PredefinedPanelHeaderIcon =
   (typeof PANEL_HEADER_ICONS)[keyof typeof PANEL_HEADER_ICONS];
 
 /** Panel header icon wire value. URLs are accepted for custom icons. */
-export type PanelHeaderIcon = PredefinedPanelHeaderIcon | string;
+export type PanelHeaderIcon = string;
 
 export type PanelIconCategory = "ai" | "search" | "data" | "system";
 
@@ -204,21 +204,7 @@ export type FramerMotionRepeatType = "loop" | "reverse" | "mirror";
 export type PanelVisibilityState = (typeof PANEL_VISIBILITY_STATE_VALUES)[number];
 
 export type PanelBodyAspectRatio =
-  | "auto"
-  | "16/9"
-  | "4/3"
-  | "1/1"
-  | "2/1"
-  | "1/2"
-  | "3/2"
-  | "21/9"
-  | "5/4"
-  | "8/5"
-  | "9/16"
-  | "1920/1080"
-  | "2560/1440"
-  | "3840/2160"
-  | string;
+  string;
 
 export interface CommunicationProtocol_FramerMotionAttributes {
   delay?: number;
@@ -630,7 +616,7 @@ function appendFramerMotionAttributesNumericPropErrors(options: {
     } else if (value < 0) {
       errors.push(
         new CommunicationProtocol_Animation_ValidationError(
-          `${prop} must be >= 0, got ${value}`,
+          `${prop} must be >= 0, got ${String(value)}`,
           `${context}.${prop}`,
           value
         )
@@ -661,11 +647,11 @@ function appendFramerMotionAttributesTimesErrors(options: {
   }
 
   for (let i = 0; i < times.length; i++) {
-    const value = times[i];
+    const value: unknown = times[i];
     if (typeof value !== "number" || value < 0 || value > 1) {
       errors.push(
         new CommunicationProtocol_Animation_ValidationError(
-          `times[${i}] must be a number between 0 and 1, got ${value}`,
+          `times[${i}] must be a number between 0 and 1, got ${String(value)}`,
           `${context}.times[${i}]`,
           value
         )
@@ -709,7 +695,7 @@ export function CommunicationProtocol_Animation_validateFramerMotionAttributes(
     if (typeof type !== "string" || !isStringMember(validTypes, type)) {
       errors.push(
         new CommunicationProtocol_Animation_ValidationError(
-          `Invalid animation type: "${type}"`,
+          `Invalid animation type: "${String(type)}"`,
           `${context}.type`,
           type,
           `Valid types: ${validTypes.join(", ")}`
@@ -724,7 +710,7 @@ export function CommunicationProtocol_Animation_validateFramerMotionAttributes(
     if (typeof repeatType !== "string" || !isStringMember(validRepeatTypes, repeatType)) {
       errors.push(
         new CommunicationProtocol_Animation_ValidationError(
-          `Invalid repeat type: "${repeatType}"`,
+          `Invalid repeat type: "${String(repeatType)}"`,
           `${context}.repeatType`,
           repeatType,
           `Valid repeat types: ${validRepeatTypes.join(", ")}`
@@ -738,7 +724,7 @@ export function CommunicationProtocol_Animation_validateFramerMotionAttributes(
     if (typeof repeat !== "number" || repeat < 0) {
       errors.push(
         new CommunicationProtocol_Animation_ValidationError(
-          `repeat must be a number >= 0, got ${repeat}`,
+          `repeat must be a number >= 0, got ${String(repeat)}`,
           `${context}.repeat`,
           repeat
         )
@@ -751,7 +737,7 @@ export function CommunicationProtocol_Animation_validateFramerMotionAttributes(
     if (typeof repeatDelay !== "number" || repeatDelay < 0) {
       errors.push(
         new CommunicationProtocol_Animation_ValidationError(
-          `repeatDelay must be a number >= 0, got ${repeatDelay}`,
+          `repeatDelay must be a number >= 0, got ${String(repeatDelay)}`,
           `${context}.repeatDelay`,
           repeatDelay
         )

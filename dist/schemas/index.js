@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod/v3";
 import { PROTOCOL_APP_ACTION_TYPES, PROTOCOL_CANVAS_ACTION_TYPES, PROTOCOL_CANVAS_CONTENT_TYPES, PROTOCOL_CHAT_ACTION_TYPES, PROTOCOL_CHAT_CONTENT_TYPES, } from "../wire/constants.js";
 import { APP_SET_SEND_ERROR_ACTION_DATA_ERROR_KINDS } from "../types/app.js";
 // ============================================================================

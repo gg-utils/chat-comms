@@ -62,7 +62,7 @@ export declare const ProtocolIdUtils: {
  */
 export declare class ProtocolIdUtils_SequenceManager {
     private readonly baseMessageId;
-    private readonly logger?;
+    private readonly logger;
     private readonly logPrefix;
     private readonly errorPrefix;
     private currentSequenceId;

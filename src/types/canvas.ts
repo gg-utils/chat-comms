@@ -194,9 +194,9 @@ export type CanvasContent =
  * forward-compatible extension blobs without widening the primary canvas contract.
  */
 interface CommunicationProtocol_CanvasContentDataBase<SectionData = unknown> {
-  toc_label?: string;
-  toc_key?: string;
-  section_data?: SectionData;
+  toc_label?: string | undefined;
+  toc_key?: string | undefined;
+  section_data?: SectionData | undefined;
 }
 
 /** Data payload for a `CANVAS_CONTENT_MARKDOWN` block: the markdown source and optional style. */
@@ -204,7 +204,7 @@ export interface CommunicationProtocol_CanvasMarkdownContentData<
   SectionData = unknown,
 > extends CommunicationProtocol_CanvasContentDataBase<SectionData> {
   markdown: string;
-  markdown_style?: MarkdownStyle;
+  markdown_style?: MarkdownStyle | undefined;
 }
 
 /** Data payload for a `CANVAS_CONTENT_SECTION` block: title, collapse state, and nested contents. */
@@ -212,8 +212,8 @@ export interface CommunicationProtocol_CanvasSectionContentData<
   SectionData = unknown,
 > extends CommunicationProtocol_CanvasContentDataBase<SectionData> {
   section_title: string;
-  section_collapsed?: boolean;
-  section_style?: SectionStyle;
+  section_collapsed?: boolean | undefined;
+  section_style?: SectionStyle | undefined;
   section_contents: CanvasContent[];
 }
 

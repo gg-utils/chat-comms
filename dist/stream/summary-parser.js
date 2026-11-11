@@ -1,13 +1,4 @@
-/**
- * @fileoverview Protocol stream summary helpers for content/action descriptions and timeline parts.
- *
- * These helpers are transport- and product-agnostic. Consumers may provide their own markdown/LLM
- * segment extraction layer, then pass the extracted segments here to describe protocol content,
- * panel updates, assistant thought markers, and action markers in encounter order.
- *
- * @testing TypeScript compile: cd chat-stream-protocol && npm run typecheck
- * @documentation reviewed=2026-05-25 standard=FILE_OVERVIEW_STANDARDS_TYPESCRIPT@3
- */
+import { omitUndefined } from "../omit-undefined.js";
 import { isProtocolPanelUpdateActionLoose, isProtocolChatMessageLoose, } from "../validators/loose.js";
 import { extractProtocolStreamSegmentsFromMarkdown } from "./segment-extractor.js";
 export const DEFAULT_PARSER_CONFIG = {
@@ -308,6 +299,8 @@ export class ProtocolStreamParser_ContentParser {
         if (typeof bodyData === "string")
             return stripMarkdown(bodyData);
         const bodyRecord = asRecord(bodyData);
+        // Preserve the legacy display conversion of arbitrary panel payloads.
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string
         if (!bodyRecord)
             return String(bodyData);
         const markdownValue = getString(bodyRecord["markdown"]);
@@ -705,22 +698,22 @@ export function ProtocolStreamParser_processStringSegment(text, onThought, onAct
             const cleanText = match[2]
                 ? `${thoughtLabel}: "${match[2]}"`
                 : thoughtLabel;
-            onThought({
+            onThought(omitUndefined({
                 originalText: match[0],
                 cleanText,
                 context: ProtocolStreamParser_extractContext(cleanText),
-            });
+            }));
         }
         else {
             const actionType = match[1];
             const description = match[2]?.trim() ?? "";
             if (!actionType || !description)
                 return;
-            onAction({
+            onAction(omitUndefined({
                 actionType,
                 description,
                 context: ProtocolStreamParser_extractContext(description),
-            });
+            }));
         }
     });
 }

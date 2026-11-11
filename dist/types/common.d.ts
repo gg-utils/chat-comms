@@ -750,7 +750,7 @@ export interface CommunicationProtocol_ActionableCardItem {
     /** Card value identifier */
     card_value: string;
     /** Actions to execute when card is selected */
-    card_actions: Array<import("./chat").CommunicationProtocol_ChatAction>;
+    card_actions: Array<import("./chat.js").CommunicationProtocol_ChatAction>;
 }
 /**
  * Actionable Cards Content Data
@@ -781,7 +781,7 @@ export interface CommunicationProtocol_ActionableChipItem {
     /** Chip state */
     chip_state: ChipState;
     /** Actions to execute when chip is selected */
-    chip_actions: Array<import("./chat").CommunicationProtocol_ChatAction>;
+    chip_actions: Array<import("./chat.js").CommunicationProtocol_ChatAction>;
 }
 /**
  * Actionable Chips Content Data

@@ -37,7 +37,7 @@ export interface ProtocolContentConsolidator_ProtocolMessage {
 
 /** Tracked action wrapper for deferred application. */
 export interface ProtocolContentConsolidator_TrackedActionWrapper {
-  targetContentId?: string;
+  targetContentId?: string | undefined;
   actionType: string;
   actionData: Record<string, unknown>;
   sourceContentId?: string;

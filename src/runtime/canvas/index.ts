@@ -7,7 +7,7 @@
  * @testing cd chat-stream-protocol && npm test
  */
 
-import type { ProtocolAction } from "../../wire/types.js";
+
 
 // ============================================================================
 // Canvas state types
@@ -158,7 +158,7 @@ export type RuntimeCanvasActionCommand<
   | {
       type: "RUNTIME_CANVAS_ACTION_COMMAND_DISPATCH_CLOSE";
       action: Action;
-      canvasId: Action["action_data"]["canvas_id"];
+      canvasId: string | undefined;
     }
   | {
       type: "RUNTIME_CANVAS_ACTION_COMMAND_QUEUE_UPDATE";

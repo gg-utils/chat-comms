@@ -1,3 +1,4 @@
+import { omitUndefined } from "../../omit-undefined.js";
 /**
  * @fileoverview Runtime chat protocol types for messages, content, actions, and canvas state.
  *
@@ -1905,25 +1906,25 @@ export function RuntimeChat_compileActionToCommands<
 
   if (RuntimeChat_actionTypeMatches(action, "APP_ACTION_WAIT_FOR_USER_INPUT")) {
     return [
-      {
+      omitUndefined({
         type: "RUNTIME_CHAT_ACTION_COMMAND_WAIT_FOR_USER_INTERACTION",
         focusTarget: action.action_data.focus_target,
-      },
+      }),
     ];
   }
 
   if (RuntimeChat_actionTypeMatches(action, "APP_ACTION_SET_SEND_ERROR")) {
     return [
-      {
+      omitUndefined({
         type: "RUNTIME_CHAT_ACTION_COMMAND_SET_SEND_ERROR",
-        sendError: {
+        sendError: omitUndefined({
           kind: action.action_data.error_kind,
           message: action.action_data.message,
           recoveryHints: action.action_data.recovery_hints ?? [],
           diagnostics: action.action_data.diagnostics,
           source: "SEND_ERROR_STATE_SOURCE_PROTOCOL",
-        },
-      },
+        }),
+      }),
     ];
   }
 

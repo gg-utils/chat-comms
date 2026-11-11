@@ -45,7 +45,7 @@ export class CommunicationProtocol_ActionWrapperContentBuilder {
      * @param options - Configuration options for the action wrapper content
      */
     constructor(options) {
-        const { action, content_width: content_width = "WIDTH_AUTO", content_queue, content_delay, message_id, } = options;
+        const { action, content_width: content_width = "WIDTH_AUTO", content_queue, content_delay, } = options;
         this.content = {
             content_id: ProtocolIdUtils.resolveContentId(options),
             content_type: "CHAT_CONTENT_ACTION_WRAPPER",

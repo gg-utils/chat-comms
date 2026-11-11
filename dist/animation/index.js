@@ -379,7 +379,7 @@ function appendFramerMotionAttributesNumericPropErrors(options) {
             errors.push(new CommunicationProtocol_Animation_ValidationError(`${prop} must be a number, got ${typeof value}`, `${context}.${prop}`, value));
         }
         else if (value < 0) {
-            errors.push(new CommunicationProtocol_Animation_ValidationError(`${prop} must be >= 0, got ${value}`, `${context}.${prop}`, value));
+            errors.push(new CommunicationProtocol_Animation_ValidationError(`${prop} must be >= 0, got ${String(value)}`, `${context}.${prop}`, value));
         }
     }
 }
@@ -396,7 +396,7 @@ function appendFramerMotionAttributesTimesErrors(options) {
     for (let i = 0; i < times.length; i++) {
         const value = times[i];
         if (typeof value !== "number" || value < 0 || value > 1) {
-            errors.push(new CommunicationProtocol_Animation_ValidationError(`times[${i}] must be a number between 0 and 1, got ${value}`, `${context}.times[${i}]`, value));
+            errors.push(new CommunicationProtocol_Animation_ValidationError(`times[${i}] must be a number between 0 and 1, got ${String(value)}`, `${context}.times[${i}]`, value));
         }
     }
 }
@@ -417,26 +417,26 @@ export function CommunicationProtocol_Animation_validateFramerMotionAttributes(a
         const validTypes = ["spring", "tween", "inertia"];
         const { type } = attributes;
         if (typeof type !== "string" || !isStringMember(validTypes, type)) {
-            errors.push(new CommunicationProtocol_Animation_ValidationError(`Invalid animation type: "${type}"`, `${context}.type`, type, `Valid types: ${validTypes.join(", ")}`));
+            errors.push(new CommunicationProtocol_Animation_ValidationError(`Invalid animation type: "${String(type)}"`, `${context}.type`, type, `Valid types: ${validTypes.join(", ")}`));
         }
     }
     if ("repeatType" in attributes) {
         const validRepeatTypes = ["loop", "reverse", "mirror"];
         const { repeatType } = attributes;
         if (typeof repeatType !== "string" || !isStringMember(validRepeatTypes, repeatType)) {
-            errors.push(new CommunicationProtocol_Animation_ValidationError(`Invalid repeat type: "${repeatType}"`, `${context}.repeatType`, repeatType, `Valid repeat types: ${validRepeatTypes.join(", ")}`));
+            errors.push(new CommunicationProtocol_Animation_ValidationError(`Invalid repeat type: "${String(repeatType)}"`, `${context}.repeatType`, repeatType, `Valid repeat types: ${validRepeatTypes.join(", ")}`));
         }
     }
     if ("repeat" in attributes) {
         const { repeat } = attributes;
         if (typeof repeat !== "number" || repeat < 0) {
-            errors.push(new CommunicationProtocol_Animation_ValidationError(`repeat must be a number >= 0, got ${repeat}`, `${context}.repeat`, repeat));
+            errors.push(new CommunicationProtocol_Animation_ValidationError(`repeat must be a number >= 0, got ${String(repeat)}`, `${context}.repeat`, repeat));
         }
     }
     if ("repeatDelay" in attributes) {
         const { repeatDelay } = attributes;
         if (typeof repeatDelay !== "number" || repeatDelay < 0) {
-            errors.push(new CommunicationProtocol_Animation_ValidationError(`repeatDelay must be a number >= 0, got ${repeatDelay}`, `${context}.repeatDelay`, repeatDelay));
+            errors.push(new CommunicationProtocol_Animation_ValidationError(`repeatDelay must be a number >= 0, got ${String(repeatDelay)}`, `${context}.repeatDelay`, repeatDelay));
         }
     }
     appendFramerMotionAttributesTimesErrors({ attrs: attributes, context, errors });

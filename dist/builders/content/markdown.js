@@ -41,7 +41,7 @@ export class CommunicationProtocol_MarkdownContentBuilder {
      * @param options - Configuration options for the markdown content
      */
     constructor(options) {
-        const { markdown, style = "DEFAULT", content_width: content_width = "WIDTH_AUTO", content_queue, content_delay, message_id, } = options;
+        const { markdown, style = "DEFAULT", content_width: content_width = "WIDTH_AUTO", content_queue, content_delay, } = options;
         this.content = {
             content_id: ProtocolIdUtils.resolveContentId(options),
             content_type: "CHAT_CONTENT_MARKDOWN",

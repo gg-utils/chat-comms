@@ -131,7 +131,7 @@ export type RuntimeCanvasActionCommand<Action extends RuntimeCanvasCompilableAct
 } | {
     type: "RUNTIME_CANVAS_ACTION_COMMAND_DISPATCH_CLOSE";
     action: Action;
-    canvasId: Action["action_data"]["canvas_id"];
+    canvasId: string | undefined;
 } | {
     type: "RUNTIME_CANVAS_ACTION_COMMAND_QUEUE_UPDATE";
     action: Action;

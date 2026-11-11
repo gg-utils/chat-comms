@@ -1,3 +1,4 @@
+import { omitUndefined } from "../../omit-undefined.js";
 /**
  * @fileoverview Builds CHAT_MESSAGE structures by composing chat content builders with shared ProtocolIdUtils context.
  *
@@ -327,7 +328,7 @@ export class CommunicationProtocol_ChatMessageBuilder {
     } = options;
 
     const updateAction =
-      new CommunicationProtocol_UpdateProgressBarActionBuilder({
+      new CommunicationProtocol_UpdateProgressBarActionBuilder(omitUndefined({
         content_id_suffix: autoId,
         content_id:
           content_id ||
@@ -345,14 +346,14 @@ export class CommunicationProtocol_ChatMessageBuilder {
         progress_bar_message: message,
         progress_bar_icon: icon,
         message_id: this.message.message_id,
-      }).build();
+      })).build();
 
-    return this.addActionWrapper({
+    return this.addActionWrapper(omitUndefined({
       content_id_suffix: autoId,
       action: updateAction,
       content_queue,
       content_delay,
-    });
+    }));
   }
 
   /**
@@ -390,12 +391,12 @@ export class CommunicationProtocol_ChatMessageBuilder {
       },
     };
 
-    return this.addActionWrapper({
+    return this.addActionWrapper(omitUndefined({
       content_id_suffix: `${options.action_id_suffix || "button-update"}-wrapper`,
       content_queue: options.content_queue,
       content_delay: options.content_delay,
       action,
-    });
+    }));
   }
 
   /**
@@ -412,12 +413,12 @@ export class CommunicationProtocol_ChatMessageBuilder {
       message_id: this.message.message_id,
     }).build();
 
-    return this.addActionWrapper({
+    return this.addActionWrapper(omitUndefined({
       content_id_suffix: `${options.action_id_suffix || "panel-update"}-wrapper`,
       content_queue: options.content_queue,
       content_delay: options.content_delay,
       action,
-    });
+    }));
   }
 
   /**
@@ -449,12 +450,12 @@ export class CommunicationProtocol_ChatMessageBuilder {
       },
     };
 
-    return this.addActionWrapper({
+    return this.addActionWrapper(omitUndefined({
       content_id_suffix: `${options.action_id_suffix || "canvas-open"}-wrapper`,
       content_queue: options.content_queue,
       content_delay: options.content_delay,
       action,
-    });
+    }));
   }
 
   /**
@@ -495,12 +496,12 @@ export class CommunicationProtocol_ChatMessageBuilder {
       },
     };
 
-    return this.addActionWrapper({
+    return this.addActionWrapper(omitUndefined({
       content_id_suffix: `${options.action_id_suffix || "canvas-update"}-wrapper`,
       content_queue: options.content_queue,
       content_delay: options.content_delay,
       action,
-    });
+    }));
   }
 
   /**
@@ -526,12 +527,12 @@ export class CommunicationProtocol_ChatMessageBuilder {
       },
     };
 
-    return this.addActionWrapper({
+    return this.addActionWrapper(omitUndefined({
       content_id_suffix: `${options.action_id_suffix || "canvas-close"}-wrapper`,
       content_queue: options.content_queue,
       content_delay: options.content_delay,
       action,
-    });
+    }));
   }
 
   /**
@@ -554,12 +555,12 @@ export class CommunicationProtocol_ChatMessageBuilder {
       action_data: { target: "APP", theme_name: options.themeName },
     };
 
-    return this.addActionWrapper({
+    return this.addActionWrapper(omitUndefined({
       content_id_suffix: `${options.action_id_suffix || "set-theme"}-wrapper`,
       content_queue: options.content_queue,
       content_delay: options.content_delay,
       action,
-    });
+    }));
   }
 
   /**
@@ -589,12 +590,12 @@ export class CommunicationProtocol_ChatMessageBuilder {
       },
     };
 
-    return this.addActionWrapper({
+    return this.addActionWrapper(omitUndefined({
       content_id_suffix: `${options.action_id_suffix || "core-console"}-wrapper`,
       content_queue: options.content_queue,
       content_delay: options.content_delay,
       action,
-    });
+    }));
   }
 
   /**
@@ -622,12 +623,12 @@ export class CommunicationProtocol_ChatMessageBuilder {
       },
     };
 
-    return this.addActionWrapper({
+    return this.addActionWrapper(omitUndefined({
       content_id_suffix: wrapperIdSuffix,
       content_queue: options.content_queue,
       content_delay: options.content_delay,
       action,
-    });
+    }));
   }
 
   /**
@@ -661,12 +662,12 @@ export class CommunicationProtocol_ChatMessageBuilder {
       action_data: actionData,
     };
 
-    return this.addActionWrapper({
+    return this.addActionWrapper(omitUndefined({
       content_id_suffix: wrapperIdSuffix,
       content_queue: options.content_queue,
       content_delay: options.content_delay,
       action,
-    });
+    }));
   }
 
   /**
@@ -689,12 +690,12 @@ export class CommunicationProtocol_ChatMessageBuilder {
       action_data: { target: "APP" },
     };
 
-    return this.addActionWrapper({
+    return this.addActionWrapper(omitUndefined({
       content_id_suffix: `${options.action_id_suffix || "thread-refresh"}-wrapper`,
       content_queue: options.content_queue,
       content_delay: options.content_delay,
       action,
-    });
+    }));
   }
 
   /**
@@ -720,12 +721,12 @@ export class CommunicationProtocol_ChatMessageBuilder {
       },
     };
 
-    return this.addActionWrapper({
+    return this.addActionWrapper(omitUndefined({
       content_id_suffix: `${options.action_id_suffix || "user-preferences"}-wrapper`,
       content_queue: options.content_queue,
       content_delay: options.content_delay,
       action,
-    });
+    }));
   }
 
   /**
@@ -772,7 +773,7 @@ export class CommunicationProtocol_ChatMessageBuilder {
     if (debug) {
       this.message.debug = true;
     } else {
-      this.message.debug = undefined;
+      delete this.message.debug;
     }
     return this;
   }
