@@ -404,9 +404,22 @@ const content = new ChatComms_Builder_CommunicationProtocol_ActionableCardsConte
 ```
 
 `body`, `fields`, and `action_id` are written to `card_body`, `card_fields`, and `card_action_id`
-only when given. The builder still generates the choose-card action for `card_actions` when no
-`actions` are passed, so it always produces a card that can be chosen; write a display-only card
-as a plain payload.
+only when given. The builder generates the choose-card action for `card_actions` when no
+`actions` are passed, so by default it produces a card that can be chosen.
+
+Pass `display_only: true` for a card that cannot be chosen. The builder then writes an empty
+`card_actions` list and generates no action, so that card needs no message ID. `display_only`
+cannot be combined with `actions` or `action_id`:
+
+```ts
+builder.addCard({
+  title: "Sample Plan B",
+  subtitle: "Short summary",
+  body: "Shown for information only.",
+  value: "plan-b",
+  display_only: true,
+});
+```
 
 ---
 

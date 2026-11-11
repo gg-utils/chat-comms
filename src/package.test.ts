@@ -531,6 +531,74 @@ describe("actionable card typed fields", () => {
     expect(ProtocolChatContentSchema.safeParse(content).success).toBe(true);
   });
 
+  it("builds a display-only card with an empty action list and no message ID", () => {
+    const content = new CommunicationProtocol_ActionableCardsContentBuilder({
+      content_queue: "main",
+      content_id_suffix: "plans",
+    })
+      .addCard({
+        title: "Sample Plan B",
+        subtitle: "Short summary",
+        body: "Shown for information only.",
+        value: "plan-b",
+        display_only: true,
+      })
+      .build();
+
+    const items = content.content_data["actionable_cards_items"] as Array<Record<string, unknown>>;
+    expect(items[0]?.["card_actions"]).toEqual([]);
+    expect(items[0]).not.toHaveProperty("card_action_id");
+    expect(items[0]).not.toHaveProperty("display_only");
+    expect(ProtocolChatContentSchema.safeParse(content).success).toBe(true);
+  });
+
+  it("keeps generating the choose-card action when display_only is false or absent", () => {
+    const build = (displayOnly?: boolean) =>
+      new CommunicationProtocol_ActionableCardsContentBuilder({
+        content_queue: "main",
+        content_id_suffix: "plans",
+        message_id: "msg-cards",
+      })
+        .addCard({
+          title: "Sample Plan A",
+          subtitle: "Short",
+          value: "plan-a",
+          ...(displayOnly === undefined ? {} : { display_only: displayOnly }),
+        })
+        .build();
+    // Content ids carry a random part, so the two builds are compared by their action types.
+    for (const content of [build(false), build()]) {
+      const items = content.content_data["actionable_cards_items"] as Array<Record<string, unknown>>;
+      const actions = items[0]?.["card_actions"] as Array<Record<string, unknown>>;
+      expect(actions.map((action) => action["action_type"])).toEqual([
+        "CHAT_ACTION_CHOOSE_ACTIONABLE_CARD",
+      ]);
+    }
+  });
+
+  it("refuses a display-only card that also says it can be chosen", () => {
+    const builder = new CommunicationProtocol_ActionableCardsContentBuilder({
+      content_queue: "main",
+      content_id_suffix: "plans",
+      message_id: "msg-cards",
+    });
+    const base = { title: "Sample Plan A", subtitle: "Short", value: "plan-a", display_only: true };
+    expect(() => builder.addCard({ ...base, action_id: "follow-up-plan-a" })).toThrow("display_only");
+    expect(() =>
+      builder.addCard({
+        ...base,
+        actions: [
+          {
+            action_id: "a-1",
+            action_type: "CHAT_ACTION_SEND_TEXT_MESSAGE",
+            action_data: { target: "CHAT", role: "USER", text: "Hello" },
+          },
+        ],
+      }),
+    ).toThrow("display_only");
+    expect(builder.getCardCount()).toBe(0);
+  });
+
   it("refuses to build a card with an empty action_id", () => {
     const builder = new CommunicationProtocol_ActionableCardsContentBuilder({
       content_queue: "main",

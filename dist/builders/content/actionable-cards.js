@@ -88,17 +88,26 @@ export class CommunicationProtocol_ActionableCardsContentBuilder {
     }
     /**
      * Add a card with actions using deconstructable options
-     * Actions are automatically generated if not provided
+     * Actions are automatically generated if not provided, unless `display_only` is set,
+     * which writes an empty action list so the card cannot be chosen
      *
      * @param options - Card configuration options
      * @returns This builder instance for method chaining
      */
-    addCard({ title, subtitle, body, fields, action_id: cardActionId, value, actions, simulated_user_message_text, }) {
+    addCard({ title, subtitle, body, fields, action_id: cardActionId, display_only: displayOnly = false, value, actions, simulated_user_message_text, }) {
         if (cardActionId !== undefined && cardActionId.length === 0) {
             throw new Error("Card action_id must be a non-empty string when provided");
         }
+        // The action list is the only selectable signal, so a display-only card must not carry
+        // anything that says it can be chosen.
+        if (displayOnly && ((actions && actions.length > 0) || cardActionId !== undefined)) {
+            throw new Error("A display_only card cannot have actions or an action_id");
+        }
         let processedActions;
-        if (actions && actions.length > 0) {
+        if (displayOnly) {
+            processedActions = [];
+        }
+        else if (actions && actions.length > 0) {
             // Use provided actions
             processedActions = actions;
         }

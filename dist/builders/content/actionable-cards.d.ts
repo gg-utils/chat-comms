@@ -66,12 +66,13 @@ export declare class CommunicationProtocol_ActionableCardsContentBuilder {
     content_width(width: ContentWidth): CommunicationProtocol_ActionableCardsContentBuilder;
     /**
      * Add a card with actions using deconstructable options
-     * Actions are automatically generated if not provided
+     * Actions are automatically generated if not provided, unless `display_only` is set,
+     * which writes an empty action list so the card cannot be chosen
      *
      * @param options - Card configuration options
      * @returns This builder instance for method chaining
      */
-    addCard({ title, subtitle, body, fields, action_id: cardActionId, value, actions, simulated_user_message_text, }: CommunicationProtocol_CardOptions): CommunicationProtocol_ActionableCardsContentBuilder;
+    addCard({ title, subtitle, body, fields, action_id: cardActionId, display_only: displayOnly, value, actions, simulated_user_message_text, }: CommunicationProtocol_CardOptions): CommunicationProtocol_ActionableCardsContentBuilder;
     /**
      * Add multiple cards at once
      *

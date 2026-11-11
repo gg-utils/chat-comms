@@ -142,6 +142,15 @@ export interface CommunicationProtocol_CardOptions {
   action_id?: string;
 
   /**
+   * Build a card that cannot be chosen: `card_actions` is written as an empty list and no
+   * choose-card action is generated, so no message ID is needed for this card
+   * Cannot be combined with `actions` or `action_id`, because a card that cannot be chosen
+   * starts nothing. Defaults to false, which keeps the generated choose-card action
+   * @optional
+   */
+  display_only?: boolean;
+
+  /**
    * Unique value identifier for this card option
    * Used in action data when the card is selected
    * @required
