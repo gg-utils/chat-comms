@@ -63,6 +63,63 @@ export const FIXTURE_NON_DEBUG_FENCED_BLOCK = `\`\`\`json
 ${JSON.stringify(FIXTURE_NON_DEBUG_MESSAGE, null, 2)}
 \`\`\``;
 
+/**
+ * Actionable cards using the typed optional card fields. The first card can be chosen:
+ * it carries `card_action_id` and one choose-card action. The second is display-only:
+ * it has no `card_action_id` and an empty `card_actions` list.
+ */
+export const FIXTURE_ACTIONABLE_CARDS_TYPED_FIELDS_MESSAGE: ProtocolChatMessage = {
+  message_id: "fixture-msg-cards-001",
+  message_type: "CHAT_MESSAGE",
+  message_role: "ASSISTANT",
+  message_target: "CHAT",
+  message_contents: [
+    {
+      content_id: "fixture-msg-cards-001-cards-plans",
+      content_type: "CHAT_CONTENT_ACTIONABLE_CARDS",
+      content_queue: "main",
+      content_data: {
+        actionable_cards_selection_mode: "SINGLE",
+        actionable_cards_selection_state: "PENDING_SELECTION",
+        actionable_cards_items: [
+          {
+            card_title: "Sample Plan A",
+            card_subtitle: "Short summary",
+            card_body: "A longer description of Sample Plan A, shown under the title.",
+            card_fields: [
+              { label: "Duration", value: "2 weeks" },
+              { label: "Effort", value: "Low" },
+              { label: "Owner", value: "Sample Team" },
+            ],
+            card_action_id: "fixture-follow-up-plan-a",
+            card_value: "plan-a",
+            card_actions: [
+              {
+                action_id: "fixture-msg-cards-001-select-plan-a",
+                action_type: "CHAT_ACTION_CHOOSE_ACTIONABLE_CARD",
+                action_data: {
+                  target: "CHAT",
+                  actionable_cards_content_id: "fixture-msg-cards-001-cards-plans",
+                  selected_card_value: "plan-a",
+                  selected_card_title: "Sample Plan A",
+                },
+              },
+            ],
+          },
+          {
+            card_title: "Sample Note",
+            card_subtitle: "For reference only",
+            card_body: "This card only displays information and cannot be chosen.",
+            card_fields: [{ label: "Status", value: "Informational" }],
+            card_value: "note",
+            card_actions: [],
+          },
+        ],
+      },
+    },
+  ],
+};
+
 export const FIXTURE_WAIT_FOR_QUEUES_DRAIN: ProtocolAction = {
   action_id: "fixture-action-wait-drain-001",
   action_type: "CHAT_ACTION_WAIT_FOR_QUEUES",

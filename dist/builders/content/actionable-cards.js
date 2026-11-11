@@ -93,7 +93,10 @@ export class CommunicationProtocol_ActionableCardsContentBuilder {
      * @param options - Card configuration options
      * @returns This builder instance for method chaining
      */
-    addCard({ title, subtitle, value, actions, simulated_user_message_text, }) {
+    addCard({ title, subtitle, body, fields, action_id: cardActionId, value, actions, simulated_user_message_text, }) {
+        if (cardActionId !== undefined && cardActionId.length === 0) {
+            throw new Error("Card action_id must be a non-empty string when provided");
+        }
         let processedActions;
         if (actions && actions.length > 0) {
             // Use provided actions
@@ -131,6 +134,10 @@ export class CommunicationProtocol_ActionableCardsContentBuilder {
         this.content.content_data.actionable_cards_items.push({
             card_title: title,
             card_subtitle: subtitle,
+            // Optional typed fields are written only when given, so cards without them keep their shape.
+            ...(body !== undefined && { card_body: body }),
+            ...(fields !== undefined && { card_fields: fields.map((field) => ({ ...field })) }),
+            ...(cardActionId !== undefined && { card_action_id: cardActionId }),
             card_value: value,
             card_actions: processedActions,
         });

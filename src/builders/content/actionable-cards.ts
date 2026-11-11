@@ -128,10 +128,17 @@ export class CommunicationProtocol_ActionableCardsContentBuilder {
   addCard({
     title,
     subtitle,
+    body,
+    fields,
+    action_id: cardActionId,
     value,
     actions,
     simulated_user_message_text,
   }: CommunicationProtocol_CardOptions): CommunicationProtocol_ActionableCardsContentBuilder {
+    if (cardActionId !== undefined && cardActionId.length === 0) {
+      throw new Error("Card action_id must be a non-empty string when provided");
+    }
+
     let processedActions: CommunicationProtocol_ChatAction[];
 
     if (actions && actions.length > 0) {
@@ -175,6 +182,10 @@ export class CommunicationProtocol_ActionableCardsContentBuilder {
     (this.content.content_data.actionable_cards_items as unknown[]).push({
       card_title: title,
       card_subtitle: subtitle,
+      // Optional typed fields are written only when given, so cards without them keep their shape.
+      ...(body !== undefined && { card_body: body }),
+      ...(fields !== undefined && { card_fields: fields.map((field) => ({ ...field })) }),
+      ...(cardActionId !== undefined && { card_action_id: cardActionId }),
       card_value: value,
       card_actions: processedActions,
     });

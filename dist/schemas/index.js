@@ -111,10 +111,23 @@ export const ProtocolChatButtonContentSchema = ProtocolBaseContentSchema.extend(
     content_type: z.literal("CHAT_CONTENT_BUTTON"),
     content_data: ProtocolChatButtonContentDataSchema,
 });
+/** One labelled value shown on an actionable card. Unknown keys pass through. */
+export const ProtocolChatActionableCardFieldSchema = z
+    .object({
+    label: z.string(),
+    value: z.string(),
+})
+    .passthrough();
 export const ProtocolChatActionableCardItemSchema = z
     .object({
     card_title: z.string(),
     card_subtitle: z.string().optional(),
+    /** Longer text shown under the title. It is separate from `card_subtitle`. */
+    card_body: z.string().optional(),
+    /** Labelled values in display order. Array order is preserved. */
+    card_fields: z.array(ProtocolChatActionableCardFieldSchema).optional(),
+    /** Identifier of the follow-up action. Present only when the card can be chosen. */
+    card_action_id: z.string().min(1, "card_action_id must be a non-empty string").optional(),
     card_value: z.string(),
     card_actions: z.array(ProtocolNestedActionSchema),
 })

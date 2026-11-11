@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  CommunicationProtocol_ActionableCardsContentBuilder,
   CommunicationProtocol_Builder,
   CommunicationProtocol_ChatMessageBuilder,
   CommunicationProtocol_MarkdownContentBuilder,
@@ -19,6 +20,7 @@ import {
   isOpeningTrigger,
 } from "./animation/index.js";
 import {
+  FIXTURE_ACTIONABLE_CARDS_TYPED_FIELDS_MESSAGE,
   FIXTURE_APP_ACTION_CORE_CONSOLE,
   FIXTURE_APP_ACTION_SET_SEND_ERROR,
   FIXTURE_APP_ACTION_SET_THEME,
@@ -31,6 +33,7 @@ import {
   FIXTURE_CANVAS_UPDATE_MODIFY,
   FIXTURE_CANVAS_UPDATE_SET,
   FIXTURE_DEBUG_MESSAGE,
+  FIXTURE_INVALID_CARD_ACTION_ID_EMPTY,
   FIXTURE_INVALID_EMPTY_CONTENTS,
   FIXTURE_INVALID_SYSTEM_ROLE,
   FIXTURE_INVALID_TARGET_APP,
@@ -52,6 +55,8 @@ import {
 import {
   ProtocolActionSchema,
   ProtocolAppActionSchema,
+  ProtocolChatActionableCardFieldSchema,
+  ProtocolChatActionableCardItemSchema,
   ProtocolCanvasActionSchema,
   ProtocolCanvasContentSchema,
   ProtocolChatActionSchema,
@@ -283,6 +288,259 @@ describe("schemas", () => {
       FIXTURE_INVALID_TARGET_APP,
     );
     expect(result.success).toBe(false);
+  });
+});
+
+describe("actionable card typed fields", () => {
+  const chooseAction = {
+    action_id: "msg-cards-select-plan-a",
+    action_type: "CHAT_ACTION_CHOOSE_ACTIONABLE_CARD",
+    action_data: {
+      target: "CHAT",
+      actionable_cards_content_id: "msg-cards-plans",
+      selected_card_value: "plan-a",
+      selected_card_title: "Sample Plan A",
+    },
+  };
+  const baseCard = {
+    card_title: "Sample Plan A",
+    card_subtitle: "Short summary",
+    card_value: "plan-a",
+    card_actions: [chooseAction],
+  };
+  const cardsContent = (...cards: unknown[]) => ({
+    content_id: "msg-cards-plans",
+    content_type: "CHAT_CONTENT_ACTIONABLE_CARDS",
+    content_queue: "main",
+    content_data: {
+      actionable_cards_selection_mode: "SINGLE",
+      actionable_cards_selection_state: "PENDING_SELECTION",
+      actionable_cards_items: cards,
+    },
+  });
+  const cardsMessage = (...cards: unknown[]) => ({
+    message_id: "msg-cards",
+    message_type: "CHAT_MESSAGE",
+    message_role: "ASSISTANT",
+    message_target: "CHAT",
+    message_contents: [cardsContent(...cards)],
+  });
+  const parseCard = (card: unknown) => ProtocolChatActionableCardItemSchema.safeParse(card);
+  const issuePaths = (card: unknown): string[] => {
+    const result = parseCard(card);
+    return result.success ? [] : result.error.issues.map((issue) => issue.path.join("."));
+  };
+
+  it("accepts card_body as a string and keeps it apart from card_subtitle", () => {
+    const result = parseCard({ ...baseCard, card_body: "A longer description." });
+    expect(result.success).toBe(true);
+    if (!result.success) return;
+    expect(result.data.card_body).toBe("A longer description.");
+    expect(result.data.card_subtitle).toBe("Short summary");
+    expect(parseCard({ ...baseCard, card_body: "" }).success).toBe(true);
+  });
+
+  it("accepts card_fields as an array of label and value strings", () => {
+    const fields = [
+      { label: "Duration", value: "2 weeks" },
+      { label: "Effort", value: "" },
+    ];
+    const result = parseCard({ ...baseCard, card_fields: fields });
+    expect(result.success).toBe(true);
+    if (!result.success) return;
+    expect(result.data.card_fields).toEqual(fields);
+    expect(parseCard({ ...baseCard, card_fields: [] }).success).toBe(true);
+    expect(ProtocolChatActionableCardFieldSchema.safeParse(fields[0]).success).toBe(true);
+  });
+
+  it("accepts card_action_id as a non-empty string", () => {
+    const result = parseCard({ ...baseCard, card_action_id: "follow-up-plan-a" });
+    expect(result.success).toBe(true);
+    if (!result.success) return;
+    expect(result.data.card_action_id).toBe("follow-up-plan-a");
+  });
+
+  it("rejects card_body values that are not strings", () => {
+    for (const card_body of [42, null, ["text"], { text: "x" }, true]) {
+      expect(issuePaths({ ...baseCard, card_body })).toEqual(["card_body"]);
+    }
+  });
+
+  it("rejects card_fields values that are not arrays of label and value strings", () => {
+    for (const card_fields of ["Duration: 2 weeks", null, 7, { label: "Duration", value: "2 weeks" }]) {
+      expect(issuePaths({ ...baseCard, card_fields })).toEqual(["card_fields"]);
+    }
+    expect(issuePaths({ ...baseCard, card_fields: ["Duration"] })).toEqual(["card_fields.0"]);
+    expect(issuePaths({ ...baseCard, card_fields: [null] })).toEqual(["card_fields.0"]);
+    expect(issuePaths({ ...baseCard, card_fields: [{ label: "Duration" }] })).toEqual([
+      "card_fields.0.value",
+    ]);
+    expect(issuePaths({ ...baseCard, card_fields: [{ value: "2 weeks" }] })).toEqual([
+      "card_fields.0.label",
+    ]);
+    expect(
+      issuePaths({
+        ...baseCard,
+        card_fields: [
+          { label: "Duration", value: "2 weeks" },
+          { label: 1, value: 2 },
+        ],
+      }),
+    ).toEqual(["card_fields.1.label", "card_fields.1.value"]);
+  });
+
+  it("rejects card_action_id values that are empty or not strings", () => {
+    for (const card_action_id of ["", 12, null, ["follow-up"], { id: "follow-up" }]) {
+      expect(issuePaths({ ...baseCard, card_action_id })).toEqual(["card_action_id"]);
+    }
+  });
+
+  it("rejects invalid typed card fields through content, message, and strict validators", () => {
+    const invalidCards = [
+      { ...baseCard, card_body: 42 },
+      { ...baseCard, card_fields: [{ label: "Duration" }] },
+      { ...baseCard, card_action_id: "" },
+    ];
+    for (const card of invalidCards) {
+      expect(ProtocolChatContentSchema.safeParse(cardsContent(card)).success).toBe(false);
+      expect(ProtocolChatMessageSchema.safeParse(cardsMessage(card)).success).toBe(false);
+      expect(parseProtocolMessageStrict(cardsMessage(card)).success).toBe(false);
+    }
+    expect(parseProtocolMessageStrict(FIXTURE_INVALID_CARD_ACTION_ID_EMPTY).success).toBe(false);
+  });
+
+  it("preserves card_fields order through parse and serialize", () => {
+    const labels = ["Zulu", "Alpha", "Mike", "Alpha", "Bravo"];
+    const card = {
+      ...baseCard,
+      card_fields: labels.map((label, index) => ({ label, value: `value-${index}` })),
+    };
+    const readLabels = (message: unknown): string[] => {
+      const parsed = parseProtocolMessageStrict(message);
+      if (!parsed.success) throw new Error("expected a valid message");
+      const items = parsed.data.message_contents[0]?.content_data["actionable_cards_items"];
+      const fields = (items as Array<{ card_fields: Array<{ label: string; value: string }> }>)[0]
+        ?.card_fields;
+      return (fields ?? []).map((field) => `${field.label}=${field.value}`);
+    };
+    const expected = labels.map((label, index) => `${label}=value-${index}`);
+
+    const parsed = parseProtocolMessageStrict(cardsMessage(card));
+    expect(parsed.success).toBe(true);
+    if (!parsed.success) return;
+    expect(readLabels(parsed.data)).toEqual(expected);
+
+    const block = writeProtocolFencedJsonBlock(parsed.data);
+    const extracted = extractProtocolFencedJsonBlocksIncremental(block, 0);
+    expect(extracted.blocks).toHaveLength(1);
+    expect(readLabels(extracted.blocks[0]?.json)).toEqual(expected);
+    expect(readLabels(JSON.parse(JSON.stringify(parsed.data)))).toEqual(expected);
+  });
+
+  it("leaves a card with none of the typed fields unchanged", () => {
+    const result = parseCard(baseCard);
+    expect(result.success).toBe(true);
+    if (!result.success) return;
+    expect(result.data).toEqual(baseCard);
+    expect(Object.keys(result.data).sort()).toEqual(
+      ["card_actions", "card_subtitle", "card_title", "card_value"].sort(),
+    );
+
+    const message = parseProtocolMessageStrict(cardsMessage(baseCard));
+    expect(message.success).toBe(true);
+    if (!message.success) return;
+    expect(message.data).toEqual(cardsMessage(baseCard));
+  });
+
+  it("still accepts a display-only card with an empty action list and no subtitle", () => {
+    const card = { card_title: "Sample Note", card_value: "note", card_actions: [] };
+    const result = parseCard(card);
+    expect(result.success).toBe(true);
+    if (!result.success) return;
+    expect(result.data).toEqual(card);
+  });
+
+  it("still passes unknown card and field keys through", () => {
+    const card = {
+      ...baseCard,
+      card_body: "A longer description.",
+      card_fields: [{ label: "Duration", value: "2 weeks", sample_field_hint: "calendar" }],
+      card_action_id: "follow-up-plan-a",
+      sample_card_extra: { nested: [1, 2, 3] },
+      card_style: "PRIMARY",
+    };
+    const result = parseCard(card);
+    expect(result.success).toBe(true);
+    if (!result.success) return;
+    expect(result.data).toEqual(card);
+
+    const message = parseProtocolMessageStrict(cardsMessage(card));
+    expect(message.success).toBe(true);
+    if (!message.success) return;
+    expect(message.data).toEqual(cardsMessage(card));
+  });
+
+  it("does not check card_action_id against card_actions", () => {
+    // The schema validates each field alone; consistency between them is a producer rule.
+    expect(parseCard({ ...baseCard, card_actions: [], card_action_id: "follow-up-plan-a" }).success).toBe(
+      true,
+    );
+    expect(parseCard(baseCard).success).toBe(true);
+  });
+
+  it("validates the typed card fields fixture", () => {
+    const result = parseProtocolMessageStrict(FIXTURE_ACTIONABLE_CARDS_TYPED_FIELDS_MESSAGE);
+    expect(result.success).toBe(true);
+    if (!result.success) return;
+    expect(result.data).toEqual(FIXTURE_ACTIONABLE_CARDS_TYPED_FIELDS_MESSAGE);
+  });
+
+  it("builds cards with the typed fields only when they are given", () => {
+    const fields = [
+      { label: "Duration", value: "2 weeks" },
+      { label: "Effort", value: "Low" },
+    ];
+    const content = new CommunicationProtocol_ActionableCardsContentBuilder({
+      content_queue: "main",
+      content_id_suffix: "plans",
+      message_id: "msg-cards",
+    })
+      .addCard({
+        title: "Sample Plan A",
+        subtitle: "Short summary",
+        body: "A longer description.",
+        fields,
+        action_id: "follow-up-plan-a",
+        value: "plan-a",
+      })
+      .addCard({ title: "Sample Plan B", subtitle: "Short summary", value: "plan-b" })
+      .build();
+
+    const items = content.content_data["actionable_cards_items"] as Array<Record<string, unknown>>;
+    expect(items[0]).toMatchObject({
+      card_subtitle: "Short summary",
+      card_body: "A longer description.",
+      card_fields: fields,
+      card_action_id: "follow-up-plan-a",
+    });
+    expect(items[0]?.["card_fields"]).not.toBe(fields);
+    expect((items[0]?.["card_actions"] as unknown[]).length).toBe(1);
+    expect(Object.keys(items[1] ?? {}).sort()).toEqual(
+      ["card_actions", "card_subtitle", "card_title", "card_value"].sort(),
+    );
+    expect(ProtocolChatContentSchema.safeParse(content).success).toBe(true);
+  });
+
+  it("refuses to build a card with an empty action_id", () => {
+    const builder = new CommunicationProtocol_ActionableCardsContentBuilder({
+      content_queue: "main",
+      content_id_suffix: "plans",
+      message_id: "msg-cards",
+    });
+    expect(() =>
+      builder.addCard({ title: "Sample Plan A", subtitle: "Short", value: "plan-a", action_id: "" }),
+    ).toThrow("non-empty");
+    expect(builder.getCardCount()).toBe(0);
   });
 });
 

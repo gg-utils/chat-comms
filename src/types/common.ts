@@ -926,6 +926,18 @@ export interface CommunicationProtocol_PanelBody_GoogleMapsReviewsContent {
 // ============================================================================
 
 /**
+ * Actionable Card Field Structure
+ *
+ * One labelled value shown on an actionable card, as an item of `card_fields`.
+ */
+export interface CommunicationProtocol_ActionableCardField {
+  /** Label of the value */
+  label: string;
+  /** Value shown next to the label */
+  value: string;
+}
+
+/**
  * Actionable Card Item Structure
  *
  * Defines the structure for individual card items in actionable cards content.
@@ -935,6 +947,15 @@ export interface CommunicationProtocol_ActionableCardItem {
   card_title: string;
   /** Card subtitle text */
   card_subtitle: string;
+  /** Longer text shown under the title. It is separate from the subtitle. */
+  card_body?: string;
+  /** Labelled values in display order. Array order is the display order. */
+  card_fields?: CommunicationProtocol_ActionableCardField[];
+  /**
+   * Identifier of the follow-up action that choosing the card starts. Present only
+   * when the card can be chosen; a card without it is display-only. Never empty.
+   */
+  card_action_id?: string;
   /** Card value identifier */
   card_value: string;
   /** Actions to execute when card is selected */

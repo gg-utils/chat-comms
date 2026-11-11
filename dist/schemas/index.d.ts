@@ -163,19 +163,75 @@ export declare const ProtocolChatButtonContentSchema: z.ZodObject<{
     content_delay?: number | undefined;
     content_group_id?: string | undefined;
 }>;
+/** One labelled value shown on an actionable card. Unknown keys pass through. */
+export declare const ProtocolChatActionableCardFieldSchema: z.ZodObject<{
+    label: z.ZodString;
+    value: z.ZodString;
+}, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+    label: z.ZodString;
+    value: z.ZodString;
+}, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+    label: z.ZodString;
+    value: z.ZodString;
+}, z.ZodTypeAny, "passthrough">>;
 export declare const ProtocolChatActionableCardItemSchema: z.ZodObject<{
     card_title: z.ZodString;
     card_subtitle: z.ZodOptional<z.ZodString>;
+    /** Longer text shown under the title. It is separate from `card_subtitle`. */
+    card_body: z.ZodOptional<z.ZodString>;
+    /** Labelled values in display order. Array order is preserved. */
+    card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        label: z.ZodString;
+        value: z.ZodString;
+    }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+        label: z.ZodString;
+        value: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+        label: z.ZodString;
+        value: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">>, "many">>;
+    /** Identifier of the follow-up action. Present only when the card can be chosen. */
+    card_action_id: z.ZodOptional<z.ZodString>;
     card_value: z.ZodString;
     card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
 }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
     card_title: z.ZodString;
     card_subtitle: z.ZodOptional<z.ZodString>;
+    /** Longer text shown under the title. It is separate from `card_subtitle`. */
+    card_body: z.ZodOptional<z.ZodString>;
+    /** Labelled values in display order. Array order is preserved. */
+    card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        label: z.ZodString;
+        value: z.ZodString;
+    }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+        label: z.ZodString;
+        value: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+        label: z.ZodString;
+        value: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">>, "many">>;
+    /** Identifier of the follow-up action. Present only when the card can be chosen. */
+    card_action_id: z.ZodOptional<z.ZodString>;
     card_value: z.ZodString;
     card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
 }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
     card_title: z.ZodString;
     card_subtitle: z.ZodOptional<z.ZodString>;
+    /** Longer text shown under the title. It is separate from `card_subtitle`. */
+    card_body: z.ZodOptional<z.ZodString>;
+    /** Labelled values in display order. Array order is preserved. */
+    card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        label: z.ZodString;
+        value: z.ZodString;
+    }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+        label: z.ZodString;
+        value: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+        label: z.ZodString;
+        value: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">>, "many">>;
+    /** Identifier of the follow-up action. Present only when the card can be chosen. */
+    card_action_id: z.ZodOptional<z.ZodString>;
     card_value: z.ZodString;
     card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
 }, z.ZodTypeAny, "passthrough">>;
@@ -185,16 +241,61 @@ export declare const ProtocolChatActionableCardsContentDataSchema: z.ZodObject<{
     actionable_cards_items: z.ZodArray<z.ZodObject<{
         card_title: z.ZodString;
         card_subtitle: z.ZodOptional<z.ZodString>;
+        /** Longer text shown under the title. It is separate from `card_subtitle`. */
+        card_body: z.ZodOptional<z.ZodString>;
+        /** Labelled values in display order. Array order is preserved. */
+        card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">>, "many">>;
+        /** Identifier of the follow-up action. Present only when the card can be chosen. */
+        card_action_id: z.ZodOptional<z.ZodString>;
         card_value: z.ZodString;
         card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
     }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
         card_title: z.ZodString;
         card_subtitle: z.ZodOptional<z.ZodString>;
+        /** Longer text shown under the title. It is separate from `card_subtitle`. */
+        card_body: z.ZodOptional<z.ZodString>;
+        /** Labelled values in display order. Array order is preserved. */
+        card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">>, "many">>;
+        /** Identifier of the follow-up action. Present only when the card can be chosen. */
+        card_action_id: z.ZodOptional<z.ZodString>;
         card_value: z.ZodString;
         card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
     }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
         card_title: z.ZodString;
         card_subtitle: z.ZodOptional<z.ZodString>;
+        /** Longer text shown under the title. It is separate from `card_subtitle`. */
+        card_body: z.ZodOptional<z.ZodString>;
+        /** Labelled values in display order. Array order is preserved. */
+        card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">>, "many">>;
+        /** Identifier of the follow-up action. Present only when the card can be chosen. */
+        card_action_id: z.ZodOptional<z.ZodString>;
         card_value: z.ZodString;
         card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
     }, z.ZodTypeAny, "passthrough">>, "many">;
@@ -204,16 +305,61 @@ export declare const ProtocolChatActionableCardsContentDataSchema: z.ZodObject<{
     actionable_cards_items: z.ZodArray<z.ZodObject<{
         card_title: z.ZodString;
         card_subtitle: z.ZodOptional<z.ZodString>;
+        /** Longer text shown under the title. It is separate from `card_subtitle`. */
+        card_body: z.ZodOptional<z.ZodString>;
+        /** Labelled values in display order. Array order is preserved. */
+        card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">>, "many">>;
+        /** Identifier of the follow-up action. Present only when the card can be chosen. */
+        card_action_id: z.ZodOptional<z.ZodString>;
         card_value: z.ZodString;
         card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
     }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
         card_title: z.ZodString;
         card_subtitle: z.ZodOptional<z.ZodString>;
+        /** Longer text shown under the title. It is separate from `card_subtitle`. */
+        card_body: z.ZodOptional<z.ZodString>;
+        /** Labelled values in display order. Array order is preserved. */
+        card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">>, "many">>;
+        /** Identifier of the follow-up action. Present only when the card can be chosen. */
+        card_action_id: z.ZodOptional<z.ZodString>;
         card_value: z.ZodString;
         card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
     }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
         card_title: z.ZodString;
         card_subtitle: z.ZodOptional<z.ZodString>;
+        /** Longer text shown under the title. It is separate from `card_subtitle`. */
+        card_body: z.ZodOptional<z.ZodString>;
+        /** Labelled values in display order. Array order is preserved. */
+        card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">>, "many">>;
+        /** Identifier of the follow-up action. Present only when the card can be chosen. */
+        card_action_id: z.ZodOptional<z.ZodString>;
         card_value: z.ZodString;
         card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
     }, z.ZodTypeAny, "passthrough">>, "many">;
@@ -223,16 +369,61 @@ export declare const ProtocolChatActionableCardsContentDataSchema: z.ZodObject<{
     actionable_cards_items: z.ZodArray<z.ZodObject<{
         card_title: z.ZodString;
         card_subtitle: z.ZodOptional<z.ZodString>;
+        /** Longer text shown under the title. It is separate from `card_subtitle`. */
+        card_body: z.ZodOptional<z.ZodString>;
+        /** Labelled values in display order. Array order is preserved. */
+        card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">>, "many">>;
+        /** Identifier of the follow-up action. Present only when the card can be chosen. */
+        card_action_id: z.ZodOptional<z.ZodString>;
         card_value: z.ZodString;
         card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
     }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
         card_title: z.ZodString;
         card_subtitle: z.ZodOptional<z.ZodString>;
+        /** Longer text shown under the title. It is separate from `card_subtitle`. */
+        card_body: z.ZodOptional<z.ZodString>;
+        /** Labelled values in display order. Array order is preserved. */
+        card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">>, "many">>;
+        /** Identifier of the follow-up action. Present only when the card can be chosen. */
+        card_action_id: z.ZodOptional<z.ZodString>;
         card_value: z.ZodString;
         card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
     }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
         card_title: z.ZodString;
         card_subtitle: z.ZodOptional<z.ZodString>;
+        /** Longer text shown under the title. It is separate from `card_subtitle`. */
+        card_body: z.ZodOptional<z.ZodString>;
+        /** Labelled values in display order. Array order is preserved. */
+        card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            label: z.ZodString;
+            value: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">>, "many">>;
+        /** Identifier of the follow-up action. Present only when the card can be chosen. */
+        card_action_id: z.ZodOptional<z.ZodString>;
         card_value: z.ZodString;
         card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
     }, z.ZodTypeAny, "passthrough">>, "many">;
@@ -251,16 +442,61 @@ export declare const ProtocolChatActionableCardsContentSchema: z.ZodObject<{
         actionable_cards_items: z.ZodArray<z.ZodObject<{
             card_title: z.ZodString;
             card_subtitle: z.ZodOptional<z.ZodString>;
+            /** Longer text shown under the title. It is separate from `card_subtitle`. */
+            card_body: z.ZodOptional<z.ZodString>;
+            /** Labelled values in display order. Array order is preserved. */
+            card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, "many">>;
+            /** Identifier of the follow-up action. Present only when the card can be chosen. */
+            card_action_id: z.ZodOptional<z.ZodString>;
             card_value: z.ZodString;
             card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
         }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
             card_title: z.ZodString;
             card_subtitle: z.ZodOptional<z.ZodString>;
+            /** Longer text shown under the title. It is separate from `card_subtitle`. */
+            card_body: z.ZodOptional<z.ZodString>;
+            /** Labelled values in display order. Array order is preserved. */
+            card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, "many">>;
+            /** Identifier of the follow-up action. Present only when the card can be chosen. */
+            card_action_id: z.ZodOptional<z.ZodString>;
             card_value: z.ZodString;
             card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
         }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
             card_title: z.ZodString;
             card_subtitle: z.ZodOptional<z.ZodString>;
+            /** Longer text shown under the title. It is separate from `card_subtitle`. */
+            card_body: z.ZodOptional<z.ZodString>;
+            /** Labelled values in display order. Array order is preserved. */
+            card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, "many">>;
+            /** Identifier of the follow-up action. Present only when the card can be chosen. */
+            card_action_id: z.ZodOptional<z.ZodString>;
             card_value: z.ZodString;
             card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
         }, z.ZodTypeAny, "passthrough">>, "many">;
@@ -270,16 +506,61 @@ export declare const ProtocolChatActionableCardsContentSchema: z.ZodObject<{
         actionable_cards_items: z.ZodArray<z.ZodObject<{
             card_title: z.ZodString;
             card_subtitle: z.ZodOptional<z.ZodString>;
+            /** Longer text shown under the title. It is separate from `card_subtitle`. */
+            card_body: z.ZodOptional<z.ZodString>;
+            /** Labelled values in display order. Array order is preserved. */
+            card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, "many">>;
+            /** Identifier of the follow-up action. Present only when the card can be chosen. */
+            card_action_id: z.ZodOptional<z.ZodString>;
             card_value: z.ZodString;
             card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
         }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
             card_title: z.ZodString;
             card_subtitle: z.ZodOptional<z.ZodString>;
+            /** Longer text shown under the title. It is separate from `card_subtitle`. */
+            card_body: z.ZodOptional<z.ZodString>;
+            /** Labelled values in display order. Array order is preserved. */
+            card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, "many">>;
+            /** Identifier of the follow-up action. Present only when the card can be chosen. */
+            card_action_id: z.ZodOptional<z.ZodString>;
             card_value: z.ZodString;
             card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
         }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
             card_title: z.ZodString;
             card_subtitle: z.ZodOptional<z.ZodString>;
+            /** Longer text shown under the title. It is separate from `card_subtitle`. */
+            card_body: z.ZodOptional<z.ZodString>;
+            /** Labelled values in display order. Array order is preserved. */
+            card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, "many">>;
+            /** Identifier of the follow-up action. Present only when the card can be chosen. */
+            card_action_id: z.ZodOptional<z.ZodString>;
             card_value: z.ZodString;
             card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
         }, z.ZodTypeAny, "passthrough">>, "many">;
@@ -289,16 +570,61 @@ export declare const ProtocolChatActionableCardsContentSchema: z.ZodObject<{
         actionable_cards_items: z.ZodArray<z.ZodObject<{
             card_title: z.ZodString;
             card_subtitle: z.ZodOptional<z.ZodString>;
+            /** Longer text shown under the title. It is separate from `card_subtitle`. */
+            card_body: z.ZodOptional<z.ZodString>;
+            /** Labelled values in display order. Array order is preserved. */
+            card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, "many">>;
+            /** Identifier of the follow-up action. Present only when the card can be chosen. */
+            card_action_id: z.ZodOptional<z.ZodString>;
             card_value: z.ZodString;
             card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
         }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
             card_title: z.ZodString;
             card_subtitle: z.ZodOptional<z.ZodString>;
+            /** Longer text shown under the title. It is separate from `card_subtitle`. */
+            card_body: z.ZodOptional<z.ZodString>;
+            /** Labelled values in display order. Array order is preserved. */
+            card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, "many">>;
+            /** Identifier of the follow-up action. Present only when the card can be chosen. */
+            card_action_id: z.ZodOptional<z.ZodString>;
             card_value: z.ZodString;
             card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
         }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
             card_title: z.ZodString;
             card_subtitle: z.ZodOptional<z.ZodString>;
+            /** Longer text shown under the title. It is separate from `card_subtitle`. */
+            card_body: z.ZodOptional<z.ZodString>;
+            /** Labelled values in display order. Array order is preserved. */
+            card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, "many">>;
+            /** Identifier of the follow-up action. Present only when the card can be chosen. */
+            card_action_id: z.ZodOptional<z.ZodString>;
             card_value: z.ZodString;
             card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
         }, z.ZodTypeAny, "passthrough">>, "many">;
@@ -311,6 +637,21 @@ export declare const ProtocolChatActionableCardsContentSchema: z.ZodObject<{
         actionable_cards_items: z.objectOutputType<{
             card_title: z.ZodString;
             card_subtitle: z.ZodOptional<z.ZodString>;
+            /** Longer text shown under the title. It is separate from `card_subtitle`. */
+            card_body: z.ZodOptional<z.ZodString>;
+            /** Labelled values in display order. Array order is preserved. */
+            card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, "many">>;
+            /** Identifier of the follow-up action. Present only when the card can be chosen. */
+            card_action_id: z.ZodOptional<z.ZodString>;
             card_value: z.ZodString;
             card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
         }, z.ZodTypeAny, "passthrough">[];
@@ -330,6 +671,21 @@ export declare const ProtocolChatActionableCardsContentSchema: z.ZodObject<{
         actionable_cards_items: z.objectInputType<{
             card_title: z.ZodString;
             card_subtitle: z.ZodOptional<z.ZodString>;
+            /** Longer text shown under the title. It is separate from `card_subtitle`. */
+            card_body: z.ZodOptional<z.ZodString>;
+            /** Labelled values in display order. Array order is preserved. */
+            card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, "many">>;
+            /** Identifier of the follow-up action. Present only when the card can be chosen. */
+            card_action_id: z.ZodOptional<z.ZodString>;
             card_value: z.ZodString;
             card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
         }, z.ZodTypeAny, "passthrough">[];
@@ -951,16 +1307,61 @@ export declare const ProtocolChatContentSchema: z.ZodDiscriminatedUnion<"content
         actionable_cards_items: z.ZodArray<z.ZodObject<{
             card_title: z.ZodString;
             card_subtitle: z.ZodOptional<z.ZodString>;
+            /** Longer text shown under the title. It is separate from `card_subtitle`. */
+            card_body: z.ZodOptional<z.ZodString>;
+            /** Labelled values in display order. Array order is preserved. */
+            card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, "many">>;
+            /** Identifier of the follow-up action. Present only when the card can be chosen. */
+            card_action_id: z.ZodOptional<z.ZodString>;
             card_value: z.ZodString;
             card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
         }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
             card_title: z.ZodString;
             card_subtitle: z.ZodOptional<z.ZodString>;
+            /** Longer text shown under the title. It is separate from `card_subtitle`. */
+            card_body: z.ZodOptional<z.ZodString>;
+            /** Labelled values in display order. Array order is preserved. */
+            card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, "many">>;
+            /** Identifier of the follow-up action. Present only when the card can be chosen. */
+            card_action_id: z.ZodOptional<z.ZodString>;
             card_value: z.ZodString;
             card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
         }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
             card_title: z.ZodString;
             card_subtitle: z.ZodOptional<z.ZodString>;
+            /** Longer text shown under the title. It is separate from `card_subtitle`. */
+            card_body: z.ZodOptional<z.ZodString>;
+            /** Labelled values in display order. Array order is preserved. */
+            card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, "many">>;
+            /** Identifier of the follow-up action. Present only when the card can be chosen. */
+            card_action_id: z.ZodOptional<z.ZodString>;
             card_value: z.ZodString;
             card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
         }, z.ZodTypeAny, "passthrough">>, "many">;
@@ -970,16 +1371,61 @@ export declare const ProtocolChatContentSchema: z.ZodDiscriminatedUnion<"content
         actionable_cards_items: z.ZodArray<z.ZodObject<{
             card_title: z.ZodString;
             card_subtitle: z.ZodOptional<z.ZodString>;
+            /** Longer text shown under the title. It is separate from `card_subtitle`. */
+            card_body: z.ZodOptional<z.ZodString>;
+            /** Labelled values in display order. Array order is preserved. */
+            card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, "many">>;
+            /** Identifier of the follow-up action. Present only when the card can be chosen. */
+            card_action_id: z.ZodOptional<z.ZodString>;
             card_value: z.ZodString;
             card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
         }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
             card_title: z.ZodString;
             card_subtitle: z.ZodOptional<z.ZodString>;
+            /** Longer text shown under the title. It is separate from `card_subtitle`. */
+            card_body: z.ZodOptional<z.ZodString>;
+            /** Labelled values in display order. Array order is preserved. */
+            card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, "many">>;
+            /** Identifier of the follow-up action. Present only when the card can be chosen. */
+            card_action_id: z.ZodOptional<z.ZodString>;
             card_value: z.ZodString;
             card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
         }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
             card_title: z.ZodString;
             card_subtitle: z.ZodOptional<z.ZodString>;
+            /** Longer text shown under the title. It is separate from `card_subtitle`. */
+            card_body: z.ZodOptional<z.ZodString>;
+            /** Labelled values in display order. Array order is preserved. */
+            card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, "many">>;
+            /** Identifier of the follow-up action. Present only when the card can be chosen. */
+            card_action_id: z.ZodOptional<z.ZodString>;
             card_value: z.ZodString;
             card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
         }, z.ZodTypeAny, "passthrough">>, "many">;
@@ -989,16 +1435,61 @@ export declare const ProtocolChatContentSchema: z.ZodDiscriminatedUnion<"content
         actionable_cards_items: z.ZodArray<z.ZodObject<{
             card_title: z.ZodString;
             card_subtitle: z.ZodOptional<z.ZodString>;
+            /** Longer text shown under the title. It is separate from `card_subtitle`. */
+            card_body: z.ZodOptional<z.ZodString>;
+            /** Labelled values in display order. Array order is preserved. */
+            card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, "many">>;
+            /** Identifier of the follow-up action. Present only when the card can be chosen. */
+            card_action_id: z.ZodOptional<z.ZodString>;
             card_value: z.ZodString;
             card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
         }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
             card_title: z.ZodString;
             card_subtitle: z.ZodOptional<z.ZodString>;
+            /** Longer text shown under the title. It is separate from `card_subtitle`. */
+            card_body: z.ZodOptional<z.ZodString>;
+            /** Labelled values in display order. Array order is preserved. */
+            card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, "many">>;
+            /** Identifier of the follow-up action. Present only when the card can be chosen. */
+            card_action_id: z.ZodOptional<z.ZodString>;
             card_value: z.ZodString;
             card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
         }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
             card_title: z.ZodString;
             card_subtitle: z.ZodOptional<z.ZodString>;
+            /** Longer text shown under the title. It is separate from `card_subtitle`. */
+            card_body: z.ZodOptional<z.ZodString>;
+            /** Labelled values in display order. Array order is preserved. */
+            card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, "many">>;
+            /** Identifier of the follow-up action. Present only when the card can be chosen. */
+            card_action_id: z.ZodOptional<z.ZodString>;
             card_value: z.ZodString;
             card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
         }, z.ZodTypeAny, "passthrough">>, "many">;
@@ -1011,6 +1502,21 @@ export declare const ProtocolChatContentSchema: z.ZodDiscriminatedUnion<"content
         actionable_cards_items: z.objectOutputType<{
             card_title: z.ZodString;
             card_subtitle: z.ZodOptional<z.ZodString>;
+            /** Longer text shown under the title. It is separate from `card_subtitle`. */
+            card_body: z.ZodOptional<z.ZodString>;
+            /** Labelled values in display order. Array order is preserved. */
+            card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, "many">>;
+            /** Identifier of the follow-up action. Present only when the card can be chosen. */
+            card_action_id: z.ZodOptional<z.ZodString>;
             card_value: z.ZodString;
             card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
         }, z.ZodTypeAny, "passthrough">[];
@@ -1030,6 +1536,21 @@ export declare const ProtocolChatContentSchema: z.ZodDiscriminatedUnion<"content
         actionable_cards_items: z.objectInputType<{
             card_title: z.ZodString;
             card_subtitle: z.ZodOptional<z.ZodString>;
+            /** Longer text shown under the title. It is separate from `card_subtitle`. */
+            card_body: z.ZodOptional<z.ZodString>;
+            /** Labelled values in display order. Array order is preserved. */
+            card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                label: z.ZodString;
+                value: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, "many">>;
+            /** Identifier of the follow-up action. Present only when the card can be chosen. */
+            card_action_id: z.ZodOptional<z.ZodString>;
             card_value: z.ZodString;
             card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
         }, z.ZodTypeAny, "passthrough">[];
@@ -1634,16 +2155,61 @@ export declare const ProtocolChatMessageSchema: z.ZodObject<{
             actionable_cards_items: z.ZodArray<z.ZodObject<{
                 card_title: z.ZodString;
                 card_subtitle: z.ZodOptional<z.ZodString>;
+                /** Longer text shown under the title. It is separate from `card_subtitle`. */
+                card_body: z.ZodOptional<z.ZodString>;
+                /** Labelled values in display order. Array order is preserved. */
+                card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">>, "many">>;
+                /** Identifier of the follow-up action. Present only when the card can be chosen. */
+                card_action_id: z.ZodOptional<z.ZodString>;
                 card_value: z.ZodString;
                 card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
             }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
                 card_title: z.ZodString;
                 card_subtitle: z.ZodOptional<z.ZodString>;
+                /** Longer text shown under the title. It is separate from `card_subtitle`. */
+                card_body: z.ZodOptional<z.ZodString>;
+                /** Labelled values in display order. Array order is preserved. */
+                card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">>, "many">>;
+                /** Identifier of the follow-up action. Present only when the card can be chosen. */
+                card_action_id: z.ZodOptional<z.ZodString>;
                 card_value: z.ZodString;
                 card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
             }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
                 card_title: z.ZodString;
                 card_subtitle: z.ZodOptional<z.ZodString>;
+                /** Longer text shown under the title. It is separate from `card_subtitle`. */
+                card_body: z.ZodOptional<z.ZodString>;
+                /** Labelled values in display order. Array order is preserved. */
+                card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">>, "many">>;
+                /** Identifier of the follow-up action. Present only when the card can be chosen. */
+                card_action_id: z.ZodOptional<z.ZodString>;
                 card_value: z.ZodString;
                 card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
             }, z.ZodTypeAny, "passthrough">>, "many">;
@@ -1653,16 +2219,61 @@ export declare const ProtocolChatMessageSchema: z.ZodObject<{
             actionable_cards_items: z.ZodArray<z.ZodObject<{
                 card_title: z.ZodString;
                 card_subtitle: z.ZodOptional<z.ZodString>;
+                /** Longer text shown under the title. It is separate from `card_subtitle`. */
+                card_body: z.ZodOptional<z.ZodString>;
+                /** Labelled values in display order. Array order is preserved. */
+                card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">>, "many">>;
+                /** Identifier of the follow-up action. Present only when the card can be chosen. */
+                card_action_id: z.ZodOptional<z.ZodString>;
                 card_value: z.ZodString;
                 card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
             }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
                 card_title: z.ZodString;
                 card_subtitle: z.ZodOptional<z.ZodString>;
+                /** Longer text shown under the title. It is separate from `card_subtitle`. */
+                card_body: z.ZodOptional<z.ZodString>;
+                /** Labelled values in display order. Array order is preserved. */
+                card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">>, "many">>;
+                /** Identifier of the follow-up action. Present only when the card can be chosen. */
+                card_action_id: z.ZodOptional<z.ZodString>;
                 card_value: z.ZodString;
                 card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
             }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
                 card_title: z.ZodString;
                 card_subtitle: z.ZodOptional<z.ZodString>;
+                /** Longer text shown under the title. It is separate from `card_subtitle`. */
+                card_body: z.ZodOptional<z.ZodString>;
+                /** Labelled values in display order. Array order is preserved. */
+                card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">>, "many">>;
+                /** Identifier of the follow-up action. Present only when the card can be chosen. */
+                card_action_id: z.ZodOptional<z.ZodString>;
                 card_value: z.ZodString;
                 card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
             }, z.ZodTypeAny, "passthrough">>, "many">;
@@ -1672,16 +2283,61 @@ export declare const ProtocolChatMessageSchema: z.ZodObject<{
             actionable_cards_items: z.ZodArray<z.ZodObject<{
                 card_title: z.ZodString;
                 card_subtitle: z.ZodOptional<z.ZodString>;
+                /** Longer text shown under the title. It is separate from `card_subtitle`. */
+                card_body: z.ZodOptional<z.ZodString>;
+                /** Labelled values in display order. Array order is preserved. */
+                card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">>, "many">>;
+                /** Identifier of the follow-up action. Present only when the card can be chosen. */
+                card_action_id: z.ZodOptional<z.ZodString>;
                 card_value: z.ZodString;
                 card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
             }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
                 card_title: z.ZodString;
                 card_subtitle: z.ZodOptional<z.ZodString>;
+                /** Longer text shown under the title. It is separate from `card_subtitle`. */
+                card_body: z.ZodOptional<z.ZodString>;
+                /** Labelled values in display order. Array order is preserved. */
+                card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">>, "many">>;
+                /** Identifier of the follow-up action. Present only when the card can be chosen. */
+                card_action_id: z.ZodOptional<z.ZodString>;
                 card_value: z.ZodString;
                 card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
             }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
                 card_title: z.ZodString;
                 card_subtitle: z.ZodOptional<z.ZodString>;
+                /** Longer text shown under the title. It is separate from `card_subtitle`. */
+                card_body: z.ZodOptional<z.ZodString>;
+                /** Labelled values in display order. Array order is preserved. */
+                card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">>, "many">>;
+                /** Identifier of the follow-up action. Present only when the card can be chosen. */
+                card_action_id: z.ZodOptional<z.ZodString>;
                 card_value: z.ZodString;
                 card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
             }, z.ZodTypeAny, "passthrough">>, "many">;
@@ -1694,6 +2350,21 @@ export declare const ProtocolChatMessageSchema: z.ZodObject<{
             actionable_cards_items: z.objectOutputType<{
                 card_title: z.ZodString;
                 card_subtitle: z.ZodOptional<z.ZodString>;
+                /** Longer text shown under the title. It is separate from `card_subtitle`. */
+                card_body: z.ZodOptional<z.ZodString>;
+                /** Labelled values in display order. Array order is preserved. */
+                card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">>, "many">>;
+                /** Identifier of the follow-up action. Present only when the card can be chosen. */
+                card_action_id: z.ZodOptional<z.ZodString>;
                 card_value: z.ZodString;
                 card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
             }, z.ZodTypeAny, "passthrough">[];
@@ -1713,6 +2384,21 @@ export declare const ProtocolChatMessageSchema: z.ZodObject<{
             actionable_cards_items: z.objectInputType<{
                 card_title: z.ZodString;
                 card_subtitle: z.ZodOptional<z.ZodString>;
+                /** Longer text shown under the title. It is separate from `card_subtitle`. */
+                card_body: z.ZodOptional<z.ZodString>;
+                /** Labelled values in display order. Array order is preserved. */
+                card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">>, "many">>;
+                /** Identifier of the follow-up action. Present only when the card can be chosen. */
+                card_action_id: z.ZodOptional<z.ZodString>;
                 card_value: z.ZodString;
                 card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
             }, z.ZodTypeAny, "passthrough">[];
@@ -2088,6 +2774,21 @@ export declare const ProtocolChatMessageSchema: z.ZodObject<{
             actionable_cards_items: z.objectOutputType<{
                 card_title: z.ZodString;
                 card_subtitle: z.ZodOptional<z.ZodString>;
+                /** Longer text shown under the title. It is separate from `card_subtitle`. */
+                card_body: z.ZodOptional<z.ZodString>;
+                /** Labelled values in display order. Array order is preserved. */
+                card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">>, "many">>;
+                /** Identifier of the follow-up action. Present only when the card can be chosen. */
+                card_action_id: z.ZodOptional<z.ZodString>;
                 card_value: z.ZodString;
                 card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
             }, z.ZodTypeAny, "passthrough">[];
@@ -2218,6 +2919,21 @@ export declare const ProtocolChatMessageSchema: z.ZodObject<{
             actionable_cards_items: z.objectInputType<{
                 card_title: z.ZodString;
                 card_subtitle: z.ZodOptional<z.ZodString>;
+                /** Longer text shown under the title. It is separate from `card_subtitle`. */
+                card_body: z.ZodOptional<z.ZodString>;
+                /** Labelled values in display order. Array order is preserved. */
+                card_fields: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                    label: z.ZodString;
+                    value: z.ZodString;
+                }, z.ZodTypeAny, "passthrough">>, "many">>;
+                /** Identifier of the follow-up action. Present only when the card can be chosen. */
+                card_action_id: z.ZodOptional<z.ZodString>;
                 card_value: z.ZodString;
                 card_actions: z.ZodArray<z.ZodLazy<z.ZodType<unknown, z.ZodTypeDef, unknown>>, "many">;
             }, z.ZodTypeAny, "passthrough">[];

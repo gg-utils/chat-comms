@@ -277,6 +277,9 @@ export interface ActionableCardState {
     items: Array<{
         card_title: string;
         card_subtitle: string;
+        card_body?: string;
+        card_fields?: ActionableCardField[];
+        card_action_id?: string;
         card_value: string;
         card_actions?: ChatAction[];
     }>;
@@ -918,10 +921,21 @@ export interface ActionWrapperContent extends BaseChatContent {
     content_type: "CHAT_CONTENT_ACTION_WRAPPER";
     content_data: ActionWrapperContentData;
 }
+/** One labelled value shown on an actionable card, as an item of `card_fields`. */
+export interface ActionableCardField {
+    label: string;
+    value: string;
+}
 /** A single card item within an `ActionableCardsContent`, with title, subtitle, value, and follow-on actions. */
 export interface ActionableCard {
     card_title: string;
     card_subtitle: string;
+    /** Longer text shown under the title. It is separate from the subtitle. */
+    card_body?: string;
+    /** Labelled values in display order. */
+    card_fields?: ActionableCardField[];
+    /** Identifier of the follow-up action. Present only when the card can be chosen. */
+    card_action_id?: string;
     card_value: string;
     card_actions: ChatAction[];
 }

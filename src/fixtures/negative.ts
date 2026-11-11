@@ -86,3 +86,30 @@ export const FIXTURE_INVALID_UPPERCASE_JSON_FENCE = "```JSON\n{\"message_type\":
 
 export const FIXTURE_INVALID_JAVASCRIPT_FENCE =
   "```javascript\n{\"message_type\":\"CHAT_MESSAGE\"}\n```";
+
+/** Actionable cards whose `card_action_id` is an empty string; strict validation rejects it. */
+export const FIXTURE_INVALID_CARD_ACTION_ID_EMPTY = {
+  message_id: "fixture-invalid-card-action-id-001",
+  message_type: "CHAT_MESSAGE",
+  message_role: "ASSISTANT",
+  message_target: "CHAT",
+  message_contents: [
+    {
+      content_id: "fixture-invalid-card-action-id-001-cards",
+      content_type: "CHAT_CONTENT_ACTIONABLE_CARDS",
+      content_queue: "main",
+      content_data: {
+        actionable_cards_selection_mode: "SINGLE",
+        actionable_cards_selection_state: "PENDING_SELECTION",
+        actionable_cards_items: [
+          {
+            card_title: "Sample Plan A",
+            card_action_id: "",
+            card_value: "plan-a",
+            card_actions: [],
+          },
+        ],
+      },
+    },
+  ],
+};

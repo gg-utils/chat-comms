@@ -71,7 +71,7 @@ export declare class CommunicationProtocol_ActionableCardsContentBuilder {
      * @param options - Card configuration options
      * @returns This builder instance for method chaining
      */
-    addCard({ title, subtitle, value, actions, simulated_user_message_text, }: CommunicationProtocol_CardOptions): CommunicationProtocol_ActionableCardsContentBuilder;
+    addCard({ title, subtitle, body, fields, action_id: cardActionId, value, actions, simulated_user_message_text, }: CommunicationProtocol_CardOptions): CommunicationProtocol_ActionableCardsContentBuilder;
     /**
      * Add multiple cards at once
      *
