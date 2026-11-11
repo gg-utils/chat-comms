@@ -38,8 +38,8 @@ import type {
 import { ProtocolIdUtils } from "../protocol-id-utils.js";
 
 interface CanvasContentMetadata {
-  toc_label?: string;
-  toc_key?: string;
+  toc_label?: string | undefined;
+  toc_key?: string | undefined;
   section_data?: unknown;
 }
 

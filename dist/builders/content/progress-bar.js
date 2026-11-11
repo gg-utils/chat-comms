@@ -41,7 +41,7 @@ export class CommunicationProtocol_ProgressBarContentBuilder {
      * @param options - Configuration options for the progress bar content
      */
     constructor(options) {
-        const { progress_bar_state: state, progress_bar_visibility: visibility, progress_bar_current_percentage, progress_bar_current_animation_duration_ms, progress_bar_next_goal_delay_ms, progress_bar_next_goal_percentage, progress_bar_next_goal_animation_duration_ms, progress_bar_message: message, progress_bar_icon: icon, content_width: content_width = "WIDTH_AUTO", content_group_id, content_queue, content_delay, message_id, } = options;
+        const { progress_bar_state: state, progress_bar_visibility: visibility, progress_bar_current_percentage, progress_bar_current_animation_duration_ms, progress_bar_next_goal_delay_ms, progress_bar_next_goal_percentage, progress_bar_next_goal_animation_duration_ms, progress_bar_message: message, progress_bar_icon: icon, content_width: content_width = "WIDTH_AUTO", content_group_id, content_queue, content_delay, } = options;
         // Use explicit values or defaults, never auto-determine state from percentage
         const resolvedState = state ?? PROGRESS_BAR_DEFAULTS.INCOMPLETE_STATE;
         const resolvedVisibility = visibility ?? PROGRESS_BAR_DEFAULTS.VISIBILITY;

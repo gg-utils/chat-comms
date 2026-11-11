@@ -47,7 +47,7 @@ export class CommunicationProtocol_ButtonContentBuilder {
      * @param options - Configuration options for the button content
      */
     constructor(options) {
-        const { button_text: buttonText, button_style: buttonStyle = "BUTTON_STYLE_PRIMARY", button_state: buttonState = "ENABLED", button_actions: actions, content_width: content_width = "WIDTH_AUTO", content_queue, content_delay, message_id: _message_id, } = options;
+        const { button_text: buttonText, button_style: buttonStyle = "BUTTON_STYLE_PRIMARY", button_state: buttonState = "ENABLED", button_actions: actions, content_width: content_width = "WIDTH_AUTO", content_queue, content_delay, } = options;
         this.content = {
             content_id: ProtocolIdUtils.resolveContentId(options),
             content_type: "CHAT_CONTENT_BUTTON",

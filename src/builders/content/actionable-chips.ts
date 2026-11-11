@@ -49,7 +49,7 @@ import { ProtocolIdUtils } from "../protocol-id-utils.js";
  */
 export class CommunicationProtocol_ActionableChipsContentBuilder {
   private content: CommunicationProtocol_ChatContent;
-  private messageId?: string;
+  private messageId: string | undefined;
 
   /**
    * Initialize the actionable chips content builder

@@ -384,7 +384,7 @@ export class CommunicationProtocol_UpdatePanelActionBuilder {
    */
   setBodyContent(content: unknown): CommunicationProtocol_UpdatePanelActionBuilder {
     if (this.action.action_data.panel_body_type) {
-      this.validateBodyContent(this.action.action_data.panel_body_type as string, content);
+      this.validateBodyContent(this.action.action_data.panel_body_type, content);
     }
     this.action.action_data.panel_body_data = content as PanelBodyContent;
     return this;
@@ -412,7 +412,7 @@ export class CommunicationProtocol_UpdatePanelActionBuilder {
    */
   setMarkdownBody(markdown: string): CommunicationProtocol_UpdatePanelActionBuilder {
     this.action.action_data.panel_body_type = "PANEL_BODY_MARKDOWN";
-    this.action.action_data.panel_body_data = markdown as PanelBodyContent;
+    this.action.action_data.panel_body_data = markdown;
     return this;
   }
 
@@ -435,7 +435,7 @@ export class CommunicationProtocol_UpdatePanelActionBuilder {
 
     this.validateBodyContent("PANEL_BODY_IMAGE", imageDataWithDefaults);
     this.action.action_data.panel_body_type = "PANEL_BODY_IMAGE";
-    this.action.action_data.panel_body_data = imageDataWithDefaults as PanelBodyContent;
+    this.action.action_data.panel_body_data = imageDataWithDefaults;
     return this;
   }
 
@@ -465,7 +465,7 @@ export class CommunicationProtocol_UpdatePanelActionBuilder {
   ): CommunicationProtocol_UpdatePanelActionBuilder {
     this.validateBodyContent("PANEL_BODY_GOOGLE_SEARCH_RESULT", resultData);
     this.action.action_data.panel_body_type = "PANEL_BODY_GOOGLE_SEARCH_RESULT";
-    this.action.action_data.panel_body_data = resultData as PanelBodyContent;
+    this.action.action_data.panel_body_data = resultData;
     return this;
   }
 
@@ -588,7 +588,7 @@ export class CommunicationProtocol_UpdatePanelActionBuilder {
   ): CommunicationProtocol_UpdatePanelActionBuilder {
     this.validateBodyContent("PANEL_BODY_GOOGLE_MAPS_REVIEWS", reviewsData);
     this.action.action_data.panel_body_type = "PANEL_BODY_GOOGLE_MAPS_REVIEWS";
-    this.action.action_data.panel_body_data = reviewsData as PanelBodyContent;
+    this.action.action_data.panel_body_data = reviewsData;
     return this;
   }
 
@@ -607,7 +607,7 @@ export class CommunicationProtocol_UpdatePanelActionBuilder {
    * @returns New header title or undefined
    */
   getNewHeader(): string | undefined {
-    return this.action.action_data.panel_header_title as string | undefined;
+    return this.action.action_data.panel_header_title;
   }
 
   /**
@@ -616,7 +616,7 @@ export class CommunicationProtocol_UpdatePanelActionBuilder {
    * @returns New body type or undefined
    */
   getNewBodyType(): string | undefined {
-    return this.action.action_data.panel_body_type as string | undefined;
+    return this.action.action_data.panel_body_type;
   }
 
   /**

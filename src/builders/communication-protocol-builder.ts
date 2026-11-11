@@ -1,3 +1,4 @@
+import { omitUndefined } from "../omit-undefined.js";
 /**
  * @fileoverview Static factory for fluent communication-protocol builders (messages, content, actions, compat shims).
  *
@@ -288,7 +289,7 @@ export class CommunicationProtocol_Builder {
     }
 
     // Normalize legacy options to the modern CommunicationProtocol_UpdatePanelActionOptions type without assertions
-    const normalized: CommunicationProtocol_UpdatePanelActionOptions = {
+    const normalized: CommunicationProtocol_UpdatePanelActionOptions = omitUndefined({
       action_id: "action_id" in options ? options.action_id : undefined,
       action_id_suffix: "action_id_suffix" in options ? options.action_id_suffix : undefined,
       content_id: options.content_id,
@@ -301,7 +302,7 @@ export class CommunicationProtocol_Builder {
       panel_body_aspect_ratio: options.panel_body_aspect_ratio,
       panel_body_data: options.panel_body_data,
       message_id: options.message_id,
-    };
+    });
 
     // Only include animation arrays when they are valid shaped arrays
     const maybeTransitions = options.panel_transitions;
@@ -467,7 +468,7 @@ export class CommunicationProtocol_Builder {
     } = options;
 
     // Create the update action
-    const updateAction = this.updateProgressBarAction({
+    const updateAction = this.updateProgressBarAction(omitUndefined({
       content_id_suffix: "progress-update",
       content_id,
       progress_bar_state,
@@ -480,7 +481,7 @@ export class CommunicationProtocol_Builder {
       progress_bar_message,
       progress_bar_icon,
       message_id,
-    }).build();
+    })).build();
 
     // Create the message with action wrapper
     return this.chatMessage({
@@ -530,7 +531,7 @@ export class CommunicationProtocol_Builder {
     } = options;
 
     // Create the update action
-    const updateAction = this.updateProgressBarAction({
+    const updateAction = this.updateProgressBarAction(omitUndefined({
       content_id_suffix: "progress-update",
       content_id: progress_bar_content_id,
       progress_bar_state,
@@ -543,7 +544,7 @@ export class CommunicationProtocol_Builder {
       progress_bar_message,
       progress_bar_icon,
       message_id,
-    }).build();
+    })).build();
 
     // Create action wrapper content
     return this.actionWrapperContent({
@@ -600,13 +601,13 @@ export class CommunicationProtocol_Builder {
     message_role: MessageRole = "ASSISTANT"
   ): CommunicationProtocol_ChatMessage {
     return this.chatMessage({ message_id: messageId, message_role: message_role })
-      .addProgressBar({
+      .addProgressBar(omitUndefined({
         content_queue,
         content_id_suffix: "progress",
         progress_bar_message,
         progress_bar_current_percentage,
         progress_bar_state,
-      })
+      }))
       .build();
   }
 

@@ -1,13 +1,4 @@
-/**
- * @fileoverview Headless queue scheduling primitives — barrier logic with no React/DOM dependency.
- *
- * These functions determine when queued content can proceed based on wait-mode semantics:
- * DRAIN, IDLE, and CONTENT_IDS. They also normalize protocol `content_delay` values and
- * partition content into the default queue versus named parallel queues without depending on
- * React, browser APIs, or a consuming app's state containers.
- *
- * @testing cd chat-stream-protocol && npm test
- */
+import { omitUndefined } from "../../omit-undefined.js";
 export const RUNTIME_QUEUE_DEFAULT_QUEUE_NAME = "main";
 export const RUNTIME_QUEUE_CONTENT_DELAY_WARNING_THRESHOLD_MS = 60000;
 // ============================================================================
@@ -110,16 +101,16 @@ export function normalizeRuntimeQueueWaitRequest(options) {
             contentItems: options.contentItems,
             targetQueueNames: queueNames,
         });
-    return {
+    return omitUndefined({
         shouldWait: true,
-        request: {
+        request: omitUndefined({
             queueNames,
             waitMode,
             pendingContentIds,
             timeoutMs: options.actionData.timeout_ms,
             onTimeout: options.actionData.on_timeout ?? "CONTINUE",
-        },
-    };
+        }),
+    });
 }
 /**
  * Decide whether a normalized runtime queue wait request is complete.

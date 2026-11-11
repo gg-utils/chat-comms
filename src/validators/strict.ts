@@ -2,7 +2,7 @@
  * Strict validation using Zod schemas.
  */
 
-import type { SafeParseReturnType } from "zod";
+import type { SafeParseReturnType } from "zod/v3";
 
 import {
   ProtocolActionSchema,

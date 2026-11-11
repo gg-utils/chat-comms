@@ -129,3 +129,17 @@ npm run build
 - This package defines protocol contracts, not a transport, persistence layer, or UI theme.
 - Keep payload examples synchronized with `docs/communication-protocol/` when changing wire types.
 - Prefer pinned Git commit dependencies for production consumers.
+
+## Use from another repository
+
+Add this dependency to your `package.json` and install normally; compiled ESM and declarations are included in the tag, with no consumer build step.
+
+```json
+"@gg-utils/chat-comms": "git+https://github.com/gg-utils/chat-comms.git#v0.2.0"
+```
+
+Requires Node `>=22.0.0 <27` (Node 22, 24, and 26).
+
+Public entry points: `/wire`, `/schemas`, `/validators`, `/stream`, `/animation`, `/builders`, `/fixtures`, `/runtime/queue`, `/runtime/chat`, `/runtime/canvas`, `/types`, and `/options`. There is no root export.
+
+Zod dependency range: `^3.25.3 || ^4.0.0`. Verified with Zod 3.25.76 and 4.6.7. Schemas deliberately import the stable `zod/v3` compatibility entry point in both majors to preserve parsing, stripping, errors, and defaults. They remain Zod 3 schema objects; this does not convert them to native Zod 4 schemas. The wire format is unchanged.

@@ -1,3 +1,4 @@
+import { omitUndefined } from "../omit-undefined.js";
 /**
  * @fileoverview Static factory for fluent communication-protocol builders (messages, content, actions, compat shims).
  *
@@ -195,7 +196,7 @@ export class CommunicationProtocol_Builder {
             throw new Error("content_queue is required and must be a non-empty string");
         }
         // Normalize legacy options to the modern CommunicationProtocol_UpdatePanelActionOptions type without assertions
-        const normalized = {
+        const normalized = omitUndefined({
             action_id: "action_id" in options ? options.action_id : undefined,
             action_id_suffix: "action_id_suffix" in options ? options.action_id_suffix : undefined,
             content_id: options.content_id,
@@ -208,7 +209,7 @@ export class CommunicationProtocol_Builder {
             panel_body_aspect_ratio: options.panel_body_aspect_ratio,
             panel_body_data: options.panel_body_data,
             message_id: options.message_id,
-        };
+        });
         // Only include animation arrays when they are valid shaped arrays
         const maybeTransitions = options.panel_transitions;
         if (maybeTransitions !== undefined &&
@@ -315,7 +316,7 @@ export class CommunicationProtocol_Builder {
     static createProgressBarUpdateMessage(options) {
         const { message_id, content_queue, message_role: message_role = "ASSISTANT", progress_bar_content_id: content_id, progress_bar_state, progress_bar_visibility, progress_bar_current_percentage, progress_bar_current_animation_duration_ms, progress_bar_next_goal_delay_ms, progress_bar_next_goal_percentage, progress_bar_next_goal_animation_duration_ms, progress_bar_message, progress_bar_icon, debug = false, } = options;
         // Create the update action
-        const updateAction = this.updateProgressBarAction({
+        const updateAction = this.updateProgressBarAction(omitUndefined({
             content_id_suffix: "progress-update",
             content_id,
             progress_bar_state,
@@ -328,7 +329,7 @@ export class CommunicationProtocol_Builder {
             progress_bar_message,
             progress_bar_icon,
             message_id,
-        }).build();
+        })).build();
         // Create the message with action wrapper
         return this.chatMessage({
             message_id,
@@ -349,7 +350,7 @@ export class CommunicationProtocol_Builder {
     static createProgressBarUpdateContent(options) {
         const { message_id, content_queue, progress_bar_content_id, progress_bar_state, progress_bar_visibility, progress_bar_current_percentage, progress_bar_current_animation_duration_ms, progress_bar_next_goal_delay_ms, progress_bar_next_goal_percentage, progress_bar_next_goal_animation_duration_ms, progress_bar_message, progress_bar_icon, } = options;
         // Create the update action
-        const updateAction = this.updateProgressBarAction({
+        const updateAction = this.updateProgressBarAction(omitUndefined({
             content_id_suffix: "progress-update",
             content_id: progress_bar_content_id,
             progress_bar_state,
@@ -362,7 +363,7 @@ export class CommunicationProtocol_Builder {
             progress_bar_message,
             progress_bar_icon,
             message_id,
-        }).build();
+        })).build();
         // Create action wrapper content
         return this.actionWrapperContent({
             content_queue,
@@ -403,13 +404,13 @@ export class CommunicationProtocol_Builder {
      */
     static createProgressBarMessage(messageId, progress_bar_message, progress_bar_current_percentage, content_queue, progress_bar_state, message_role = "ASSISTANT") {
         return this.chatMessage({ message_id: messageId, message_role: message_role })
-            .addProgressBar({
+            .addProgressBar(omitUndefined({
             content_queue,
             content_id_suffix: "progress",
             progress_bar_message,
             progress_bar_current_percentage,
             progress_bar_state,
-        })
+        }))
             .build();
     }
     /**

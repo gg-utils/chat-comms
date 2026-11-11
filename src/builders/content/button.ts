@@ -64,7 +64,6 @@ export class CommunicationProtocol_ButtonContentBuilder {
       content_width: content_width = "WIDTH_AUTO",
       content_queue,
       content_delay,
-      message_id: _message_id,
     } = options;
 
     this.content = {

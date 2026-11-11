@@ -1,27 +1,4 @@
-/**
- * @fileoverview Runtime chat protocol types for messages, content, actions, and canvas state.
- *
- * This package module owns the reusable chat runtime type surface that was previously
- * duplicated inside an initial UI consumer. It re-exports canonical wire types and adds generic
- * client/runtime extensions (content_source_*, raw_content, opaque metadata, etc.) without
- * depending on any consuming product's domain model. Canvas queue scope metadata lives in
- * `@gg-utils/chat-comms/runtime/canvas`.
- *
- * @example
- * ```typescript
- * import type { ChatMessage } from "@gg-utils/chat-comms/runtime/chat";
- *
- * const message: ChatMessage = {
- *   message_id: "msg_123",
- *   message_type: "CHAT_MESSAGE",
- *   message_role: "ASSISTANT",
- *   message_target: "CHAT",
- *   message_contents: [],
- * };
- * ```
- * @testing TypeScript compile: cd chat-stream-protocol && npm run typecheck
- * @documentation reviewed=2026-04-13 standard=FILE_OVERVIEW_STANDARDS_TYPESCRIPT@3
- */
+import { omitUndefined } from "../../omit-undefined.js";
 export { APP_SET_SEND_ERROR_ACTION_DATA_ERROR_KIND_ENTITY_NOT_FOUND, APP_SET_SEND_ERROR_ACTION_DATA_ERROR_KIND_NETWORK_ERROR, APP_SET_SEND_ERROR_ACTION_DATA_ERROR_KIND_PROTOCOL_ERROR, APP_SET_SEND_ERROR_ACTION_DATA_ERROR_KIND_SYSTEM_ERROR, APP_SET_SEND_ERROR_ACTION_DATA_ERROR_KIND_TIMEOUT, APP_SET_SEND_ERROR_ACTION_DATA_ERROR_KINDS, } from "../../types/app.js";
 // Base interface for chat content
 /**
@@ -209,24 +186,24 @@ export function RuntimeChat_compileActionToCommands(options) {
     }
     if (RuntimeChat_actionTypeMatches(action, "APP_ACTION_WAIT_FOR_USER_INPUT")) {
         return [
-            {
+            omitUndefined({
                 type: "RUNTIME_CHAT_ACTION_COMMAND_WAIT_FOR_USER_INTERACTION",
                 focusTarget: action.action_data.focus_target,
-            },
+            }),
         ];
     }
     if (RuntimeChat_actionTypeMatches(action, "APP_ACTION_SET_SEND_ERROR")) {
         return [
-            {
+            omitUndefined({
                 type: "RUNTIME_CHAT_ACTION_COMMAND_SET_SEND_ERROR",
-                sendError: {
+                sendError: omitUndefined({
                     kind: action.action_data.error_kind,
                     message: action.action_data.message,
                     recoveryHints: action.action_data.recovery_hints ?? [],
                     diagnostics: action.action_data.diagnostics,
                     source: "SEND_ERROR_STATE_SOURCE_PROTOCOL",
-                },
-            },
+                }),
+            }),
         ];
     }
     if (RuntimeChat_isCanvasPassThroughAction(action)) {

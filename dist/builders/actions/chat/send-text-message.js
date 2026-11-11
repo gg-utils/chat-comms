@@ -39,7 +39,7 @@ export class CommunicationProtocol_SendTextMessageActionBuilder {
      * @param options - Configuration options for the send text message action
      */
     constructor(options) {
-        const { text, role = "USER", message_id } = options;
+        const { text, role = "USER" } = options;
         this.action = {
             action_id: ProtocolIdUtils.resolveActionId(options),
             action_type: "CHAT_ACTION_SEND_TEXT_MESSAGE",

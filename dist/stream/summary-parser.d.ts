@@ -8,16 +8,16 @@
  * @testing TypeScript compile: cd chat-stream-protocol && npm run typecheck
  * @documentation reviewed=2026-05-25 standard=FILE_OVERVIEW_STANDARDS_TYPESCRIPT@3
  */
-import type { CommunicationProtocol_UpdatePanelActionData, PanelBodyType } from "../types/index.js";
+import type { CommunicationProtocol_UpdatePanelActionData } from "../types/index.js";
 import { type ProtocolJsonCandidate, type ProtocolStreamParser_ChatContentCandidate } from "../validators/loose.js";
 /** Parsed protocol message extracted from stream output. */
 export interface ProtocolStreamParser_ParsedProtocolMessage {
     messageId: string;
     contentType: string;
-    markdown?: string;
+    markdown?: string | undefined;
     cleanText: string;
-    delay?: number;
-    content_id?: string;
+    delay?: number | undefined;
+    content_id?: string | undefined;
     isDebug?: boolean;
     sourceIndex?: number;
 }
@@ -61,9 +61,9 @@ export declare const DEFAULT_PARSER_CONFIG: ProtocolStreamParser_ParserConfig;
 export declare function ProtocolStreamParser_extractCallToAction(text: string): string | null;
 /** Describes a single parsed action extracted from the protocol stream. */
 export interface ProtocolStreamParser_ParsedAction {
-    readonly actionId?: string;
+    readonly actionId?: string | undefined;
     readonly actionType: string;
-    readonly actionTarget?: string;
+    readonly actionTarget?: string | undefined;
     readonly actionData: Record<string, unknown>;
 }
 /** Segment shape consumed by the generic protocol stream summary extractor. */
@@ -145,7 +145,7 @@ export declare class ProtocolStreamParser_ContentParser {
     /** Serializes panel header, body description, and body type into a compact JSON marker. */
     extractPanelContent(contentData: Record<string, unknown>): string;
     /** Converts arbitrary panel body payloads into human-readable text. */
-    describePanelBody(bodyType: PanelBodyType | string | undefined, bodyData: unknown): string;
+    describePanelBody(bodyType: string | undefined, bodyData: unknown): string;
     /** Maps panel body type tokens containing provider substrings into short labels. */
     private getPanelProviderLabel;
 }

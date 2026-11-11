@@ -1,29 +1,4 @@
-/**
- * @fileoverview Builds CHAT_MESSAGE structures by composing chat content builders with shared ProtocolIdUtils context.
- *
- * Prefer `CommunicationProtocol_Builder` facades for one-liners; use this class when you need fine-grained sequencing, delays, or mixed content stacks.
- *
- * @example
- * ```typescript
- * import { CommunicationProtocol_ChatMessageBuilder } from "./chat-message.js";
- *
- * const message = new CommunicationProtocol_ChatMessageBuilder({
- *   message_id: "msg-400",
- *   message_role: "ASSISTANT",
- * })
- *   .addMarkdown({
- *     content_queue: "main",
- *     content_id_suffix: "intro",
- *     markdown: "# Pick next step",
- *   })
- *   .build();
- * ```
- *
- * @testing TypeScript compile: cd chat-stream-protocol && npm run build
- * @see @gg-utils/chat-comms/docs/communication-protocol/type-specifications/CHAT_MESSAGE.md - CHAT_MESSAGE contract
- * @see @gg-utils/chat-comms/builders - Package builder facade.
- *  * @documentation reviewed=2026-04-13 standard=FILE_OVERVIEW_STANDARDS_TYPESCRIPT@3
- */
+import { omitUndefined } from "../../omit-undefined.js";
 import { ProtocolIdUtils } from "../protocol-id-utils.js";
 import { CommunicationProtocol_UpdatePanelActionBuilder } from "../actions/chat/update-panel.js";
 import { CommunicationProtocol_UpdateProgressBarActionBuilder } from "../actions/chat/update-progress-bar.js";
@@ -206,7 +181,7 @@ export class CommunicationProtocol_ChatMessageBuilder {
      */
     updateProgressBar(options) {
         const { content_id_suffix: autoId = "progress-update", content_id, targetAutoId, content_queue, content_delay, progress_bar_state: state, progress_bar_visibility: visibility, progress_bar_current_percentage, progress_bar_current_animation_duration_ms, progress_bar_next_goal_delay_ms, progress_bar_next_goal_percentage, progress_bar_next_goal_animation_duration_ms, progress_bar_message: message, progress_bar_icon: icon, } = options;
-        const updateAction = new CommunicationProtocol_UpdateProgressBarActionBuilder({
+        const updateAction = new CommunicationProtocol_UpdateProgressBarActionBuilder(omitUndefined({
             content_id_suffix: autoId,
             content_id: content_id ||
                 ProtocolIdUtils.generateContentId(this.message.message_id, targetAutoId || autoId),
@@ -220,13 +195,13 @@ export class CommunicationProtocol_ChatMessageBuilder {
             progress_bar_message: message,
             progress_bar_icon: icon,
             message_id: this.message.message_id,
-        }).build();
-        return this.addActionWrapper({
+        })).build();
+        return this.addActionWrapper(omitUndefined({
             content_id_suffix: autoId,
             action: updateAction,
             content_queue,
             content_delay,
-        });
+        }));
     }
     /**
      * Update an existing button with auto-ID support (shortcut for action wrapper).
@@ -256,12 +231,12 @@ export class CommunicationProtocol_ChatMessageBuilder {
                 }),
             },
         };
-        return this.addActionWrapper({
+        return this.addActionWrapper(omitUndefined({
             content_id_suffix: `${options.action_id_suffix || "button-update"}-wrapper`,
             content_queue: options.content_queue,
             content_delay: options.content_delay,
             action,
-        });
+        }));
     }
     /**
      * Update an existing panel with auto-ID support (shortcut for action wrapper).
@@ -274,12 +249,12 @@ export class CommunicationProtocol_ChatMessageBuilder {
             ...options,
             message_id: this.message.message_id,
         }).build();
-        return this.addActionWrapper({
+        return this.addActionWrapper(omitUndefined({
             content_id_suffix: `${options.action_id_suffix || "panel-update"}-wrapper`,
             content_queue: options.content_queue,
             content_delay: options.content_delay,
             action,
-        });
+        }));
     }
     /**
      * Open or focus a canvas workspace with auto-ID support (shortcut for action wrapper).
@@ -303,12 +278,12 @@ export class CommunicationProtocol_ChatMessageBuilder {
                 }),
             },
         };
-        return this.addActionWrapper({
+        return this.addActionWrapper(omitUndefined({
             content_id_suffix: `${options.action_id_suffix || "canvas-open"}-wrapper`,
             content_queue: options.content_queue,
             content_delay: options.content_delay,
             action,
-        });
+        }));
     }
     /**
      * Update a canvas workspace with auto-ID support (shortcut for action wrapper).
@@ -341,12 +316,12 @@ export class CommunicationProtocol_ChatMessageBuilder {
                 }),
             },
         };
-        return this.addActionWrapper({
+        return this.addActionWrapper(omitUndefined({
             content_id_suffix: `${options.action_id_suffix || "canvas-update"}-wrapper`,
             content_queue: options.content_queue,
             content_delay: options.content_delay,
             action,
-        });
+        }));
     }
     /**
      * Close a canvas workspace with auto-ID support (shortcut for action wrapper).
@@ -364,12 +339,12 @@ export class CommunicationProtocol_ChatMessageBuilder {
                 canvas_id: options.canvasDocumentId,
             },
         };
-        return this.addActionWrapper({
+        return this.addActionWrapper(omitUndefined({
             content_id_suffix: `${options.action_id_suffix || "canvas-close"}-wrapper`,
             content_queue: options.content_queue,
             content_delay: options.content_delay,
             action,
-        });
+        }));
     }
     /**
      * Set the consumer app theme with auto-ID support (shortcut for action wrapper).
@@ -384,12 +359,12 @@ export class CommunicationProtocol_ChatMessageBuilder {
             action_type: "APP_ACTION_SET_THEME",
             action_data: { target: "APP", theme_name: options.themeName },
         };
-        return this.addActionWrapper({
+        return this.addActionWrapper(omitUndefined({
             content_id_suffix: `${options.action_id_suffix || "set-theme"}-wrapper`,
             content_queue: options.content_queue,
             content_delay: options.content_delay,
             action,
-        });
+        }));
     }
     /**
      * Stream a diagnostic line to consumer developer consoles (shortcut for action wrapper).
@@ -411,12 +386,12 @@ export class CommunicationProtocol_ChatMessageBuilder {
                 ...(options.source !== undefined && { source: options.source }),
             },
         };
-        return this.addActionWrapper({
+        return this.addActionWrapper(omitUndefined({
             content_id_suffix: `${options.action_id_suffix || "core-console"}-wrapper`,
             content_queue: options.content_queue,
             content_delay: options.content_delay,
             action,
-        });
+        }));
     }
     /**
      * Set the chat input placeholder with auto-ID support (shortcut for action wrapper).
@@ -437,12 +412,12 @@ export class CommunicationProtocol_ChatMessageBuilder {
                 placeholder: options.placeholder,
             },
         };
-        return this.addActionWrapper({
+        return this.addActionWrapper(omitUndefined({
             content_id_suffix: wrapperIdSuffix,
             content_queue: options.content_queue,
             content_delay: options.content_delay,
             action,
-        });
+        }));
     }
     /**
      * Surface a structured send-error state with auto-ID support (shortcut for action wrapper).
@@ -469,12 +444,12 @@ export class CommunicationProtocol_ChatMessageBuilder {
             action_type: "APP_ACTION_SET_SEND_ERROR",
             action_data: actionData,
         };
-        return this.addActionWrapper({
+        return this.addActionWrapper(omitUndefined({
             content_id_suffix: wrapperIdSuffix,
             content_queue: options.content_queue,
             content_delay: options.content_delay,
             action,
-        });
+        }));
     }
     /**
      * Request a thread-list refresh with auto-ID support (shortcut for action wrapper).
@@ -489,12 +464,12 @@ export class CommunicationProtocol_ChatMessageBuilder {
             action_type: "APP_ACTION_THREAD_LIST_REFRESH",
             action_data: { target: "APP" },
         };
-        return this.addActionWrapper({
+        return this.addActionWrapper(omitUndefined({
             content_id_suffix: `${options.action_id_suffix || "thread-refresh"}-wrapper`,
             content_queue: options.content_queue,
             content_delay: options.content_delay,
             action,
-        });
+        }));
     }
     /**
      * Send user-preference updates with auto-ID support (shortcut for action wrapper).
@@ -512,12 +487,12 @@ export class CommunicationProtocol_ChatMessageBuilder {
                 preference_updates: options.preferenceUpdates,
             },
         };
-        return this.addActionWrapper({
+        return this.addActionWrapper(omitUndefined({
             content_id_suffix: `${options.action_id_suffix || "user-preferences"}-wrapper`,
             content_queue: options.content_queue,
             content_delay: options.content_delay,
             action,
-        });
+        }));
     }
     /**
      * Set the message role
@@ -563,7 +538,7 @@ export class CommunicationProtocol_ChatMessageBuilder {
             this.message.debug = true;
         }
         else {
-            this.message.debug = undefined;
+            delete this.message.debug;
         }
         return this;
     }

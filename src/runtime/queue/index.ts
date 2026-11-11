@@ -1,3 +1,4 @@
+import { omitUndefined } from "../../omit-undefined.js";
 /**
  * @fileoverview Headless queue scheduling primitives — barrier logic with no React/DOM dependency.
  *
@@ -247,16 +248,16 @@ export function normalizeRuntimeQueueWaitRequest(options: {
           targetQueueNames: queueNames,
         });
 
-  return {
+  return omitUndefined({
     shouldWait: true,
-    request: {
+    request: omitUndefined({
       queueNames,
       waitMode,
       pendingContentIds,
       timeoutMs: options.actionData.timeout_ms,
       onTimeout: options.actionData.on_timeout ?? "CONTINUE",
-    },
-  };
+    }),
+  });
 }
 
 /**

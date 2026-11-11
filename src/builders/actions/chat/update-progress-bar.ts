@@ -56,7 +56,6 @@ export class CommunicationProtocol_UpdateProgressBarActionBuilder {
       progress_bar_next_goal_animation_duration_ms: nextGoalAnimationDurationMs,
       progress_bar_message: message,
       progress_bar_icon: icon,
-      message_id,
     } = options;
 
     this.action = {
@@ -294,7 +293,7 @@ export class CommunicationProtocol_UpdateProgressBarActionBuilder {
    * @returns Current percentage or undefined
    */
   getCurrentPercentage(): number | undefined {
-    return this.action.action_data.progress_bar_current_percentage as number | undefined;
+    return this.action.action_data.progress_bar_current_percentage;
   }
 
   /**
@@ -303,7 +302,7 @@ export class CommunicationProtocol_UpdateProgressBarActionBuilder {
    * @returns Current state or undefined
    */
   getCurrentState(): string | undefined {
-    return this.action.action_data.progress_bar_state as string | undefined;
+    return this.action.action_data.progress_bar_state;
   }
 
   /**
@@ -312,7 +311,7 @@ export class CommunicationProtocol_UpdateProgressBarActionBuilder {
    * @returns Current message or undefined
    */
   getCurrentMessage(): string | undefined {
-    return this.action.action_data.progress_bar_message as string | undefined;
+    return this.action.action_data.progress_bar_message;
   }
 
   /**

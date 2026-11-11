@@ -53,7 +53,6 @@ export class CommunicationProtocol_MarkdownContentBuilder {
       content_width: content_width = "WIDTH_AUTO",
       content_queue,
       content_delay,
-      message_id,
     } = options;
 
     this.content = {

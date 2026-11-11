@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod/v3";
 import type { CanvasContent, CommunicationProtocol_CanvasSectionContent, CommunicationProtocol_CanvasSectionContentData } from "../types/index.js";
 export declare const ProtocolWireMessageRoleSchema: z.ZodEnum<["USER", "ASSISTANT"]>;
 export type ProtocolWireMessageRole_Schema = z.infer<typeof ProtocolWireMessageRoleSchema>;

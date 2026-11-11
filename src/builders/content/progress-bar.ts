@@ -65,7 +65,6 @@ export class CommunicationProtocol_ProgressBarContentBuilder {
       content_group_id,
       content_queue,
       content_delay,
-      message_id,
     } = options;
 
     // Use explicit values or defaults, never auto-determine state from percentage

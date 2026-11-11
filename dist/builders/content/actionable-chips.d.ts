@@ -36,7 +36,7 @@ import type { ActionableChipSelectionMode, ActionableChipSelectionState, Content
  */
 export declare class CommunicationProtocol_ActionableChipsContentBuilder {
     private content;
-    private messageId?;
+    private messageId;
     /**
      * Initialize the actionable chips content builder
      *

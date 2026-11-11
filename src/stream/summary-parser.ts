@@ -1,3 +1,4 @@
+import { omitUndefined } from "../omit-undefined.js";
 /**
  * @fileoverview Protocol stream summary helpers for content/action descriptions and timeline parts.
  *
@@ -11,7 +12,6 @@
 
 import type {
   CommunicationProtocol_UpdatePanelActionData,
-  PanelBodyType,
 } from "../types/index.js";
 import {
   isProtocolPanelUpdateActionLoose,
@@ -25,10 +25,10 @@ import { extractProtocolStreamSegmentsFromMarkdown } from "./segment-extractor.j
 export interface ProtocolStreamParser_ParsedProtocolMessage {
   messageId: string;
   contentType: string;
-  markdown?: string;
+  markdown?: string | undefined;
   cleanText: string;
-  delay?: number;
-  content_id?: string;
+  delay?: number | undefined;
+  content_id?: string | undefined;
   isDebug?: boolean;
   sourceIndex?: number;
 }
@@ -106,9 +106,9 @@ export function ProtocolStreamParser_extractCallToAction(
 
 /** Describes a single parsed action extracted from the protocol stream. */
 export interface ProtocolStreamParser_ParsedAction {
-  readonly actionId?: string;
+  readonly actionId?: string | undefined;
   readonly actionType: string;
-  readonly actionTarget?: string;
+  readonly actionTarget?: string | undefined;
   readonly actionData: Record<string, unknown>;
 }
 
@@ -187,7 +187,7 @@ export function getString(value: unknown): string | undefined {
 
 /** Returns `value` typed as `T[]` if it is an array; returns `undefined` otherwise. */
 export function asArray<T>(value: unknown): T[] | undefined {
-  if (Array.isArray(value)) return value;
+  if (Array.isArray(value)) return value as T[];
   return undefined;
 }
 
@@ -469,7 +469,7 @@ export class ProtocolStreamParser_ContentParser {
 
   /** Converts arbitrary panel body payloads into human-readable text. */
   public describePanelBody(
-    bodyType: PanelBodyType | string | undefined,
+    bodyType: string | undefined,
     bodyData: unknown,
   ): string {
     if (bodyData === undefined || bodyData === null)
@@ -477,6 +477,8 @@ export class ProtocolStreamParser_ContentParser {
     if (typeof bodyData === "string") return stripMarkdown(bodyData);
 
     const bodyRecord = asRecord(bodyData);
+    // Preserve the legacy display conversion of arbitrary panel payloads.
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     if (!bodyRecord) return String(bodyData);
 
     const markdownValue = getString(bodyRecord["markdown"]);
@@ -525,7 +527,7 @@ export class ProtocolStreamParser_ContentParser {
 
   /** Maps panel body type tokens containing provider substrings into short labels. */
   private getPanelProviderLabel(
-    bodyType: PanelBodyType | string | undefined,
+    bodyType: string | undefined,
   ): string {
     if (!bodyType || typeof bodyType !== "string") return "Panel";
     if (bodyType.includes("CHATGPT")) return "ChatGPT";
@@ -677,7 +679,7 @@ export class ProtocolStreamParser_ActionParser {
 interface ProtocolStreamParser_ParsedPanelData {
   readonly panelHeader: string;
   readonly panelContent: string;
-  readonly panelBodyType?: string;
+  readonly panelBodyType?: string | undefined;
   readonly isPanelData: boolean;
 }
 
@@ -966,20 +968,20 @@ export function ProtocolStreamParser_processStringSegment(
         const cleanText = match[2]
           ? `${thoughtLabel}: "${match[2]}"`
           : thoughtLabel;
-        onThought({
+        onThought(omitUndefined({
           originalText: match[0],
           cleanText,
           context: ProtocolStreamParser_extractContext(cleanText),
-        });
+        }));
       } else {
         const actionType = match[1];
         const description = match[2]?.trim() ?? "";
         if (!actionType || !description) return;
-        onAction({
+        onAction(omitUndefined({
           actionType,
           description,
           context: ProtocolStreamParser_extractContext(description),
-        });
+        }));
       }
     });
 }
